@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geek.ms.mapper.RoleMapper">
+
+	<select id="selectAll" resultType="com.geek.ms.model.Role">
+		select * from role
+	</select>
+	
+	<resultMap type="com.geek.ms.model.Role" id="roleMap">
+		<id property="id" column="id" />
+		<result property="roleName" column="roleName" />
+		<collection property="resources" ofType="com.geek.ms.model.Resources">
+			<id property="id" column="rsid" />
+			<result property="url" column="url" />
+		</collection>
+	</resultMap>
+	
+	<select id="selectPageAll" resultMap="roleMap">
+		SELECT
+			r.id,
+			r.roleName,
+			rs.id rsid,
+			rs.url 
+		FROM
+			role r
+			LEFT JOIN role_resources rr ON r.id = rr.role_id
+			LEFT JOIN resources rs ON rr.resources_id = rs.id 
+			LIMIT #{start},#{length}			
+	</select>
+	
+	<select id="selectOtherUrl" resultType="com.geek.ms.model.Resources">
+		SELECT
+			id,url 
+		FROM
+			resources 
+		WHERE
+			url NOT IN (
+			SELECT
+				rs.url 
+			FROM
+				resources rs
+				LEFT JOIN role_resources rr ON rs.id = rr.resources_id
+				LEFT JOIN role r ON rr.role_id = r.id 
+			WHERE
+			r.id = #{id} 
+			)
+	</select>
+	
+	<select id="loadUserRole" parameterType="java.util.HashMap" resultType="com.geek.ms.model.Role">
+		SELECT
+			r.* 
+		FROM
+			role r
+			LEFT JOIN user_role ur ON r.id = ur.role_id
+			LEFT JOIN USER u ON ur.user_id = u.id 
+		WHERE
+			u.id =#{userId}
+	</select>
+	
+</mapper>

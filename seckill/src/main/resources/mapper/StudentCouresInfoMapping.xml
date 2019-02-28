@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geek.ms.mapper.StudentCouresInfoMapper">
+
+	<insert id="addAllStudentCoures" parameterType="java.util.List">
+		insert into student_coures_info(student_id,coures_info_id,time)
+		values
+		<foreach collection="list" item="item" index="index" separator=",">
+            (${item.userId}, ${item.couresInfoId}, #{item.timestamp})
+        </foreach>
+	</insert>
+	
+	<select id="loadCourse" resultType="com.geek.ms.model.CourseModel">
+		SELECT
+			ci.id,
+			c.name,
+			ui.user_id,
+			ui.realName,
+			ui.college,
+			ci.amount 
+		FROM
+			coures_info ci
+			LEFT JOIN course c ON ci.coures_id = c.id
+			LEFT JOIN user_info ui ON ci.user_id = ui.user_id
+		where c.ismust=0
+			LIMIT #{start},
+			#{length}
+	</select>
+	
+	<select id="getCourseCount" resultType="java.lang.Integer">
+		SELECT
+			count(c.id) count
+		FROM
+			course c
+		WHERE
+			c.ismust=0	
+	</select>
+	
+	<select id="isOpen" resultType="java.lang.Integer">
+		select open from resources where url='/select/seckill'
+	</select>
+	
+	<update id="openOrClose">
+		update resources set open=#{open} where url='/select/seckill'
+	</update>
+
+</mapper>

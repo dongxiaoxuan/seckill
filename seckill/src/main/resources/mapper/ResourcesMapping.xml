@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geek.ms.mapper.ResourcesMapper">
+
+	<select id="queryAll" resultType="com.geek.ms.model.Resources">
+		SELECT
+			* 
+		FROM
+			resources 
+		ORDER BY
+			id ASC
+	</select>
+
+	<select id="loadUserResources" parameterType="java.util.HashMap" resultType="com.geek.ms.model.Resources">
+		SELECT
+			r.id,
+			r.name,
+			r.url,
+			r.parentId 
+		FROM
+			resources r
+			LEFT JOIN role_resources rr ON r.id = rr.resources_id
+			LEFT JOIN user_role ur ON rr.role_id = ur.role_id 
+		WHERE
+			ur.user_id = #{userId}
+		<if test="type != null">
+			AND
+			r.type = #{type}
+		</if>
+	</select>
+	
+	<resultMap type="com.geek.ms.model.Resources" id="resourcesMap">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="url" column="url" />
+		<result property="type" column="type" />
+		<result property="parentName" column="parentName" />
+	</resultMap>
+	
+	<select id="selectPageAll" resultMap="resourcesMap">
+	SELECT
+		rr.id,
+		rr.NAME,
+		rr.url,
+		rr.type,
+		r.NAME parentName 
+	FROM
+		resources r
+		LEFT JOIN resources rr ON r.id = rr.parentId 
+	WHERE
+		rr.parentId = r.id 
+		LIMIT #{start},#{length}			
+	</select>
+	
+</mapper>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>资源管理</title>
+<style>
+	.active {
+		color : red;
+	}
+</style>
+</head>
+<body>
+<!-- 第一个menu为文件名，第二个为fragment值 -->
+<div th:include="common/menu :: menu"></div>
+<table>
+	<thead>
+		<tr>
+			<th id="thid">id</th>
+			<th>资源名称</th>
+			<th>资源链接</th>
+			<th>资源类型</th>
+			<th>父资源名</th>
+			<th>测试</th>
+		</tr>
+	</thead>
+	<tbody>
+	
+		<tr th:each="resource,resourceStat : ${resources}" class="resourcetr">
+			<td th:text="${resource.id}" class="id">1</td>
+			<td th:text="${resource.name}">name</td>
+			<td th:text="${resource.url}">url</td>
+			<td th:text="${resource.type == 1 ?'菜单' : resource.type == 2 ?'按钮' : '其他'}" class="enable">菜单</td>
+			<td th:text="${resource.parentName}">parentname</td>
+			<td></td>
+		</tr>
+	</tbody>
+</table>
+<div>
+	<button th:each="i : ${#numbers.sequence(1, page)}" th:text="${i}" th:id="page+${i}" class="pagebutt">1</button>
+</div>
+<!-- 分页换页，提交起始页码和每页长度 -->
+<form id="hiddenForm1" th:action="@{/resources}" method="post">
+	<input type="hidden" name="start" id="hiddenStart" />
+	<input type="hidden" name="length" id="hiddenLength" />
+</form>
+</body>
+<script type="text/javascript" th:src="@{/js/jquery-1.11.2.min.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+$(function(){
+	$(".pagebutt").click(function(){
+		var page = parseInt(this.innerHTML);
+		var length = 10;
+		var start = (page - 1) * length;
+		$("#hiddenStart").val(start);
+		$("#hiddenLength").val(length);
+		$("#hiddenForm1").submit();
+	});
+});
+</script>
+</html>

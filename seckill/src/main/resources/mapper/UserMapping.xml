@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geek.ms.mapper.UserMapper">
+
+	<select id="selectByUsername" parameterType="java.lang.String" resultType="com.geek.ms.model.User">
+		SELECT
+			* 
+		FROM
+		USER 
+		WHERE
+			username =#{username}
+	</select>
+	
+	<resultMap type="com.geek.ms.model.User" id="userRoleMap">
+		<id property="id" column="id" />
+		<result property="username" column="username" />
+		<result property="enable" column="enable" />
+		<collection property="roles" ofType="com.geek.ms.model.Role">
+			<result property="roleName" column="roleName" />
+		</collection>
+	</resultMap>
+	
+	<select id="selectPageAll" resultMap="userRoleMap">
+		SELECT
+			u.id,u.username,u.enable,r.roleName
+		FROM
+		USER u left join user_role ur on u.id=ur.user_id
+		left join role r on ur.role_id=r.id
+		ORDER BY
+			id ASC 
+			LIMIT #{start},
+			#{length}
+	</select>
+
+	<select id="selectAll" resultType="com.geek.ms.model.User">
+		select * from user
+	</select>
+
+	<insert id="addUser" parameterType="com.geek.ms.model.User">
+		insert into user(username, password, enable) values(#{username},#{password},#{enable});
+	</insert>
+	
+	<update id="setEnable" parameterType="com.geek.ms.model.User">
+		update user set enable=#{enable} where id=#{id}
+	</update>
+
+</mapper>

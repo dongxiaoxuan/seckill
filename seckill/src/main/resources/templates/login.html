@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title>登录</title>
+</head>
+<body>
+	<div id="loginbox">
+		<span th:text="${msg}"></span>
+		<form id="loginform" class="form-vertical" th:action="@{/login}" method="post">
+			<input type="text" id="username" name="username" placeholder="Username" autocomplete="" />
+			<input type="password" id="password" name="password" placeholder="Password" />
+			<a type="submit" href="javascript:$('#loginform').submit();">Login</a>
+		</form>
+	</div>
+</body>
+<script type="text/javascript" th:src="@{/js/jquery-1.11.2.min.js}"></script>
+<script>
+/*获取到Url里面的参数*/
+(function ($) {
+	$.getUrlParam = function (name) {
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+		var r = window.location.search.substr(1).match(reg);
+		if (r != null) return unescape(r[2]); return null;
+	}
+  
+})(jQuery);
+if($.getUrlParam('kickout') == 1) {
+	alert("您的账号已在其他环境登陆，请重新登录");
+}
+</script>
+</html>

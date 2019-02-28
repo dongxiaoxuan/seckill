@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>用户管理</title>
+<style>
+	#hiddenForm2,.hideroleselect{
+		display: none;
+	}
+	.active {
+		color : red;
+	}
+</style>
+</head>
+<body>
+<div th:include="common/menu :: menu"></div>
+<button class="addbutt">添加</button>
+<!-- 添加 -->
+<form id="hiddenForm2">
+	<input type="text" name="username" id="username" />
+	<input type="password" name="password" id="password" />
+	<input type="button" value="提交" id="addsubmitbutt" />
+</form>
+<table>
+	<thead>
+		<tr>
+			<th id="thid">id</th>
+			<th>用户名</th>
+			<th>状态</th>
+			<th>角色</th>
+			<th>操作</th>
+			<th>测试</th>
+		</tr>
+	</thead>
+	<tbody id="tbody">
+	
+		<tr th:each="user,userStat : ${users}" class="usertr">
+			<td th:text="${user.id}" class="id">1</td>
+			<td th:text="${user.username}">username</td>
+			<td th:text="${user.enable} == 1 ?'启用':'禁用'" class="enable">启用</td>
+			<td>
+				<select  class="roleselect">
+					<th:block th:each="role2 : ${user.roles}">
+					<option class="roleoption" th:each="role : ${roles}" th:if="${role.roleName == role2.roleName}" th:value="${role.id}" th:text="${role.roleName}" selected="selected" disabled="disabled"></option>
+					<option class="roleoption" th:each="role : ${roles}" th:if="${role.roleName != role2.roleName}" th:value="${role.id}" th:text="${role.roleName}"></option>
+					</th:block>
+				</select>
+				<select class="hideroleselect">
+					<option selected="selected" disabled="disabled">请选择</option>
+					<option class="roleoption" th:each="role : ${roles}" th:value="${role.id}" th:text="${role.roleName}"></option>
+				</select>
+			</td>
+			<td><button th:text="${user.enable} == 1 ?'禁用':'启用'" class="enablebutt">按钮</button></td>
+		</tr>
+	</tbody>
+</table>
+<div id="buttDiv">
+	<button th:each="i : ${#numbers.sequence(1, page)}" th:text="${i}" th:id="page+${i}" class="pagebutt"></button>
+</div>
+<!-- 分页换页，提交起始页码和每页长度 -->
+<form id="hiddenForm1" th:action="@{/users}" method="post">
+	<input type="hidden" name="start" id="hiddenStart" />
+	<input type="hidden" name="length" id="hiddenLength" />
+</form>
+</body>
+<script type="text/javascript" th:src="@{/js/jquery-1.11.2.min.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+
+window.onload=function(){
+	var flag = 1;
+	$(".pagebutt").on("click", function(){
+		var page = this.innerHTML;
+		var length = 10;
+		var start = (page - 1) * length;
+		 $("#hiddenStart").val(start);
+		$("#hiddenLength").val(length);
+		$("#hiddenForm1").submit(); 
+		//方法2：window.location.href="users?start="+start+"&length="+length;
+		/* $.ajax({
+			url : 'users',
+			type : 'get',
+			data : {
+				start : start,
+				length : length
+			},
+			success : function(html){
+				var start = html.indexOf("tbody");
+				var end = html.indexOf("/tbody");
+				var html1 = html.substring(start + 6, end - 1);
+				$("tbody").html(html1);
+				/ var buttStart = html.indexOf('myScript');
+				var hstr = "</html>"
+				var buttEnd = html.indexOf(hstr, html.indexOf(hstr) + 1)
+				var html2 = html.substring(buttStart + 10, buttEnd-11);
+				$("script").html(html2); /
+				if(flag != page) {
+					flag = page;
+				}else{
+					return;
+				}
+				//alert(flag);
+			}
+		});  */
+		/* $.post("users", { start : start, length : length } ,function(html){
+			$("body").html(html);
+		}); */
+		
+	});
+	$(".addbutt").click(function(){
+		$("#hiddenForm2").toggle();
+	});
+	$("#addsubmitbutt").click(function(){
+		var username = $("#username").val();
+		var password = $("#password").val();
+		$.ajax({
+			url : 'users/add',
+			type : 'post',
+			data : {
+				username : username,
+				password : password
+			},
+			success : function(result) {
+				alert("成功 " + result);
+				$("#hiddenForm2").hide();
+			},
+			error : function(result) {
+				alert("失败 " + result);
+			}
+		});
+	});
+	$(".enablebutt").click(function(){
+		var id = $(this).parents("tr").find(".id").html();
+		var enablestr = $(this).parents("tr").find(".enable").html();
+		var enable = parseInt("启用" == enablestr ? 0 : 1);
+		$.ajax({
+			url : 'users/enable',
+			type : 'post',
+			data : {
+				id : id,
+				enable : enable
+			},
+			success : function(result) {
+				var enstr = enable == 0 ? '启用' : '禁用';
+				var destr = enable == 0 ? '禁用' : '启用';
+				$(this).parents("tr").find(".enablebutt").html(enstr);
+				$(this).parents("tr").find(".enable").html(destr);
+				alert("成功 " + result);
+			}.bind(this),//在ajax用this需要用bind(this)
+			error : function(result) {
+				alert("失败 " + result);
+			}
+		});
+	});
+	$(".roleselect").change(function(){
+		var flag = confirm("确认更改用户角色吗？");
+		if(true == flag) {
+			var roleId = $(this).val();
+			var userId = $(this).parents("tr").find(".id").html();
+			//alert(roleid+","+userid);
+			$.ajax({
+				url : 'users/userrole',
+				type : 'post',
+				data : {
+					userId : userId,
+					roleId : roleId
+				},
+				success : function(result) {
+					$(this).children().each(function(){
+						$(this).removeAttr("disabled");
+					})
+					$(this).find("[value='" + $(this).val() +"']").attr("disabled","disabled");
+					alert("成功 " + result);
+				}.bind(this),
+				error : function(result) {
+					alert("失败 " + result);
+				}
+			});
+		}else {
+		}
+	});
+	$(".roleselect").click(function(){
+		var size = $(this).find("option").length;//或者size()
+		if(0 == size){
+			alert("该用户暂无角色，请手动设置");
+			$(this).html($(".hideroleselect").html());
+		}
+	});
+}
+
+</script>
+</html>

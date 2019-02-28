@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>角色管理</title>
+<style>
+	.active {
+		color : red;
+	}
+	.otherresourcesselect {
+		display: none;
+	}
+</style>
+</head>
+<body>
+<!-- 第一个menu为文件名，第二个为fragment值 -->
+<div th:include="common/menu :: menu"></div>
+<table>
+	<thead>
+		<tr>
+			<th id="thid">id</th>
+			<th>角色名称</th>
+			<th>角色资源</th>
+			<th>分配权限</th>
+			<th>测试</th>
+		</tr>
+	</thead>
+	<tbody>
+	
+		<tr th:each="role,roleStat : ${roles}" class="roletr">
+			<td th:text="${role.id}" class="id">1</td>
+			<td th:text="${role.roleName}">name</td>
+			<td>
+				<select  class="resourcesselect">
+					<th:block th:each="resource : ${role.resources}">
+						<option th:value="${resource.id}" th:text="${resource.url}"></option>
+					</th:block>
+				</select>
+			</td>
+			<td>
+				<button class="otherbutt">选择资源</button>
+				<select class="otherresourcesselect"></select>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<div>
+	<button th:each="i : ${#numbers.sequence(1, page)}" th:text="${i}" th:id="page+${i}" class="pagebutt">1</button>
+</div>
+<!-- 分页换页，提交起始页码和每页长度 -->
+<form id="hiddenForm1" th:action="@{/roles}" method="post">
+	<input type="hidden" name="start" id="hiddenStart" />
+	<input type="hidden" name="length" id="hiddenLength" />
+</form>
+</body>
+<script type="text/javascript" th:src="@{/js/jquery-1.11.2.min.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+$(function(){
+	$(".pagebutt").click(function(){
+		var page = parseInt(this.innerHTML);
+		var length = 1;
+		var start = (page - 1) * length;
+		$("#hiddenStart").val(start);
+		$("#hiddenLength").val(length);
+		$("#hiddenForm1").submit();
+	});
+	
+	$(".otherbutt").click(function(){
+		var id = parseInt($(this).parents(".roletr").find(".id").html());
+		$.ajax({
+			type : 'post',
+			url : 'roles/otherUrl',
+			data : {
+				id : id
+			},
+			dataType : 'json',
+			success : function(data) {
+				$(this).hide();
+				for(var i = 0; i < data.length; i ++) {
+					$(this).siblings(".otherresourcesselect").append("<option class='confirm' value='"+data[i].id+"'>"+data[i].url+"</option>");
+					$(this).siblings(".otherresourcesselect").show();
+				}
+			}.bind(this)
+		});
+	});
+});
+</script>
+</html>
