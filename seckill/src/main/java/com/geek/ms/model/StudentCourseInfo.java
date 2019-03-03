@@ -3,7 +3,7 @@ package com.geek.ms.model;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class StudentCouresInfo implements Serializable{
+public class StudentCourseInfo implements Serializable{
 
 	private static final long serialVersionUID = -6845363569155863927L;
 
@@ -11,10 +11,10 @@ public class StudentCouresInfo implements Serializable{
 	private int userId;
 	private int couresInfoId;
 	private Timestamp timestamp;
-	public StudentCouresInfo() {
+	public StudentCourseInfo() {
 		super();
 	}
-	public StudentCouresInfo(int id, int userId, int couresInfoId, Timestamp timestamp) {
+	public StudentCourseInfo(int id, int userId, int couresInfoId, Timestamp timestamp) {
 		super();
 		this.id = id;
 		this.userId = userId;
