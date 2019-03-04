@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geek.ms.mapper.CourseMapper">
+
+	<select id="loadWeek" resultType="com.geek.ms.model.Week">
+		select * from week
+	</select>
+
+	<select id="loadFestivals" resultType="com.geek.ms.model.Festivals">
+		select * from festivals
+	</select>
+
+	<select id="queryCourseTable" resultType="com.geek.ms.model.CourseTable">
+SELECT
+	ci.id,
+	ci.course_id cid,
+	c.NAME,
+	ui.realName,
+	cwf.week_id wid,
+	cwf.festivals_id fid 
+FROM
+	USER u
+	LEFT JOIN classes cls ON u.classes_id = cls.id
+	LEFT JOIN classes_course_info cci ON cls.id = cci.classes_id
+	LEFT JOIN course_info ci ON cci.course_info_id = ci.id
+	LEFT JOIN ci_week_festivals cwf ON ci.course_id = cwf.ciid
+	LEFT JOIN course c ON ci.course_id = c.id
+	LEFT JOIN USER u2 ON ci.user_id = u2.id
+	LEFT JOIN user_info ui ON u2.id = ui.user_id 
+WHERE
+	u.id = #{id} UNION
+SELECT
+	ci.id,
+	ci.course_id cid,
+	c.NAME,
+	ui.realName,
+	cwf.week_id wid,
+	cwf.festivals_id fid 
+FROM
+	USER u
+	LEFT JOIN student_course_info sci ON u.id = sci.user_id
+	LEFT JOIN course_info ci ON sci.course_info_id = ci.id
+	LEFT JOIN ci_week_festivals cwf ON ci.course_id = cwf.ciid
+	LEFT JOIN course c ON ci.course_id = c.id
+	LEFT JOIN USER u2 ON ci.user_id = u2.id
+	LEFT JOIN user_info ui ON u2.id = ui.user_id 
+WHERE
+	u.id = #{id}
+	</select>
+
+</mapper>
