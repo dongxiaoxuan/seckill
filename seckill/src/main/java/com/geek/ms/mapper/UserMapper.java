@@ -2,7 +2,7 @@ package com.geek.ms.mapper;
 
 import java.util.List;
 
-import com.geek.ms.model.User;
+import com.geek.ms.pojo.vo.User;
 
 public interface UserMapper {
 

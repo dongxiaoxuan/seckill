@@ -2,9 +2,9 @@ package com.geek.ms.mapper;
 
 import java.util.List;
 
-import com.geek.ms.model.CourseTable;
-import com.geek.ms.model.Festivals;
-import com.geek.ms.model.Week;
+import com.geek.ms.pojo.vo.CourseTable;
+import com.geek.ms.pojo.vo.Festivals;
+import com.geek.ms.pojo.vo.Week;
 
 public interface CourseMapper {
 	

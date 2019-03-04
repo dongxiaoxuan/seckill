@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.geek.ms.mapper.ResourcesMapper;
-import com.geek.ms.model.Resources;
+import com.geek.ms.pojo.vo.Resources;
 import com.geek.ms.service.ResourcesService;
 
 @Service

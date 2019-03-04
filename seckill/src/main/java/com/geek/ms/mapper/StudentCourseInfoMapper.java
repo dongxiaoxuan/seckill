@@ -2,8 +2,8 @@ package com.geek.ms.mapper;
 
 import java.util.List;
 
-import com.geek.ms.model.CourseModel;
-import com.geek.ms.model.StudentCourseInfo;
+import com.geek.ms.pojo.vo.CourseModel;
+import com.geek.ms.pojo.vo.StudentCourseInfo;
 
 public interface StudentCourseInfoMapper {
 

@@ -19,8 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.geek.ms.mapper.CouresInfoMapper;
 import com.geek.ms.mapper.StudentCourseInfoMapper;
-import com.geek.ms.model.CourseModel;
-import com.geek.ms.model.StudentCourseInfo;
+import com.geek.ms.pojo.vo.CourseModel;
+import com.geek.ms.pojo.vo.StudentCourseInfo;
 import com.geek.ms.service.SeckillCouresService;
 
 import redis.clients.jedis.Jedis;

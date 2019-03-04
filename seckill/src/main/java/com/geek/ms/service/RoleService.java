@@ -3,8 +3,8 @@ package com.geek.ms.service;
 import java.util.List;
 import java.util.Map;
 
-import com.geek.ms.model.Resources;
-import com.geek.ms.model.Role;
+import com.geek.ms.pojo.vo.Resources;
+import com.geek.ms.pojo.vo.Role;
 
 public interface RoleService {
 	

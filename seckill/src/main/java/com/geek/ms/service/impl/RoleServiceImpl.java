@@ -10,8 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.geek.ms.mapper.ResourcesMapper;
 import com.geek.ms.mapper.RoleMapper;
-import com.geek.ms.model.Resources;
-import com.geek.ms.model.Role;
+import com.geek.ms.pojo.vo.Resources;
+import com.geek.ms.pojo.vo.Role;
 import com.geek.ms.service.RoleService;
 import com.geek.ms.shiro.MyShiroRealm;
 

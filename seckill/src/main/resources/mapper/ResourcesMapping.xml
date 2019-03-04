@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.geek.ms.mapper.ResourcesMapper">
 
-	<select id="queryAll" resultType="com.geek.ms.model.Resources">
+	<select id="queryAll" resultType="com.geek.ms.pojo.vo.Resources">
 		SELECT
 			* 
 		FROM
@@ -11,7 +11,7 @@
 			id ASC
 	</select>
 
-	<select id="loadUserResources" parameterType="java.util.HashMap" resultType="com.geek.ms.model.Resources">
+	<select id="loadUserResources" parameterType="java.util.HashMap" resultType="com.geek.ms.pojo.vo.Resources">
 		SELECT
 			r.id,
 			r.name,
@@ -29,7 +29,7 @@
 		</if>
 	</select>
 	
-	<resultMap type="com.geek.ms.model.Resources" id="resourcesMap">
+	<resultMap type="com.geek.ms.pojo.vo.Resources" id="resourcesMap">
 		<id property="id" column="id" />
 		<result property="name" column="name" />
 		<result property="url" column="url" />

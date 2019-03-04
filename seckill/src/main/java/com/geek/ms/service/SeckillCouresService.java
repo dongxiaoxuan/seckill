@@ -2,7 +2,7 @@ package com.geek.ms.service;
 
 import java.util.List;
 
-import com.geek.ms.model.CourseModel;
+import com.geek.ms.pojo.vo.CourseModel;
 
 public interface SeckillCouresService {
 

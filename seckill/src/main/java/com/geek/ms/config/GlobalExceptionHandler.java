@@ -12,7 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.geek.ms.exception.MyException;
-import com.geek.ms.model.ErrorResponseEntity;
+import com.geek.ms.pojo.vo.ErrorResponseEntity;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

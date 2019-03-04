@@ -10,8 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.geek.ms.mapper.RoleMapper;
 import com.geek.ms.mapper.UserMapper;
 import com.geek.ms.mapper.UserRoleMapper;
-import com.geek.ms.model.Role;
-import com.geek.ms.model.User;
+import com.geek.ms.pojo.vo.Role;
+import com.geek.ms.pojo.vo.User;
 import com.geek.ms.service.UserService;
 
 @Service

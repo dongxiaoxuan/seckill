@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.geek.ms.model.User;
+import com.geek.ms.pojo.vo.User;
 
 @Controller
 public class LoginController {

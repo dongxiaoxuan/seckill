@@ -2,15 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.geek.ms.mapper.UserInfoMapper">
 
-	<select id="selectAllUserInfo" resultType="com.geek.ms.model.UserInfo">
+	<select id="selectAllUserInfo" resultType="com.geek.ms.pojo.vo.UserInfo">
 		SELECT * FROM user_info where user_id=#{id}
 	</select>
 
-	<select id="selectAllUserInfoDetail" resultType="com.geek.ms.model.UserInfoDetail">
+	<select id="selectAllUserInfoDetail" resultType="com.geek.ms.pojo.vo.UserInfoDetail">
 		SELECT * FROM user_info_detail
 	</select>
 	
-	<update id="updateUserInfoByUserId" parameterType="com.geek.ms.model.UserInfo">
+	<update id="updateUserInfoByUserId" parameterType="com.geek.ms.pojo.vo.UserInfo">
 		UPDATE user_info 
 		SET realName = #{realName},
 		phone = #{phone},

@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 
-import com.geek.ms.model.StudentCourseInfo;
+import com.geek.ms.pojo.vo.StudentCourseInfo;
 import com.geek.ms.service.SeckillCouresService;
 import com.geek.ms.util.BeanString;
 

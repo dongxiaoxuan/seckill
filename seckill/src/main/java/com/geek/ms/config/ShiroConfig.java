@@ -2,7 +2,7 @@ package com.geek.ms.config;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 
-import com.geek.ms.model.Resources;
+import com.geek.ms.pojo.vo.Resources;
 import com.geek.ms.service.ResourcesService;
 import com.geek.ms.shiro.KickoutSessionControlFilter;
 import com.geek.ms.shiro.MyShiroRealm;

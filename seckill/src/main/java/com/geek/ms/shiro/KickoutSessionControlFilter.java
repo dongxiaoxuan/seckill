@@ -16,7 +16,7 @@ import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.util.WebUtils;
 
-import com.geek.ms.model.User;
+import com.geek.ms.pojo.vo.User;
 
 
 /**

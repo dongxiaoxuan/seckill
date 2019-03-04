@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.geek.ms.mapper.UserInfoMapper;
-import com.geek.ms.model.UserInfo;
-import com.geek.ms.model.UserInfoDetail;
+import com.geek.ms.pojo.vo.UserInfo;
+import com.geek.ms.pojo.vo.UserInfoDetail;
 import com.geek.ms.service.UserInfoService;
 
 @Service

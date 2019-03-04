@@ -14,7 +14,7 @@
 		SELECT id FROM course where ismust = 0
 	</select>
 	
-	<select id="loadCourse" resultType="com.geek.ms.model.CourseModel">
+	<select id="loadCourse" resultType="com.geek.ms.pojo.vo.CourseModel">
 		SELECT
 			ci.id,
 			c.NAME,
@@ -43,9 +43,9 @@
 			c.ismust=0	
 	</select>
 	
-	<resultMap type="com.geek.ms.model.StudentCourseInfo" id="sciMap">
+	<resultMap type="com.geek.ms.pojo.vo.StudentCourseInfo" id="sciMap">
 		<result column="couresInfoId" property="couresInfoId" jdbcType="INTEGER"/>
-		<collection property="userInfo" ofType="com.geek.ms.model.UserInfo">
+		<collection property="userInfo" ofType="com.geek.ms.pojo.vo.UserInfo">
 			<result column="number" property="number" />
 			<result column="realName" property="realName" />
 			<result column="college" property="college" />

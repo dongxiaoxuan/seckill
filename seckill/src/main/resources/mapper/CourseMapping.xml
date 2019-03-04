@@ -2,15 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.geek.ms.mapper.CourseMapper">
 
-	<select id="loadWeek" resultType="com.geek.ms.model.Week">
+	<select id="loadWeek" resultType="com.geek.ms.pojo.vo.Week">
 		select * from week
 	</select>
 
-	<select id="loadFestivals" resultType="com.geek.ms.model.Festivals">
+	<select id="loadFestivals" resultType="com.geek.ms.pojo.vo.Festivals">
 		select * from festivals
 	</select>
 
-	<select id="queryCourseTable" resultType="com.geek.ms.model.CourseTable">
+	<select id="queryCourseTable" resultType="com.geek.ms.pojo.vo.CourseTable">
 SELECT
 	ci.id,
 	ci.course_id cid,

@@ -1,6 +1,6 @@
 package com.geek.ms.service;
 
-import com.geek.ms.model.UserRole;
+import com.geek.ms.pojo.vo.UserRole;
 
 public interface UserRoleService {
 	

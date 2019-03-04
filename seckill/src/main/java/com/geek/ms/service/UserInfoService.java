@@ -2,8 +2,8 @@ package com.geek.ms.service;
 
 import java.util.List;
 
-import com.geek.ms.model.UserInfo;
-import com.geek.ms.model.UserInfoDetail;
+import com.geek.ms.pojo.vo.UserInfo;
+import com.geek.ms.pojo.vo.UserInfoDetail;
 
 public interface UserInfoService {
 

@@ -25,9 +25,9 @@ import com.alibaba.fastjson.JSON;
 import com.geek.ms.annotation.CacheLock;
 import com.geek.ms.annotation.CacheParam;
 import com.geek.ms.annotation.Limit;
-import com.geek.ms.model.CourseModel;
-import com.geek.ms.model.SeckillStat;
-import com.geek.ms.model.StudentCourseInfo;
+import com.geek.ms.pojo.vo.CourseModel;
+import com.geek.ms.pojo.vo.SeckillStat;
+import com.geek.ms.pojo.vo.StudentCourseInfo;
 import com.geek.ms.service.SeckillCouresService;
 import com.geek.ms.util.BeanString;
 

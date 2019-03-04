@@ -2,11 +2,11 @@ package com.geek.ms.service;
 
 import java.util.List;
 
-import com.geek.ms.model.CourseTable;
-import com.geek.ms.model.Festivals;
-import com.geek.ms.model.StudentCourseInfo;
-import com.geek.ms.model.StudentInfoToTeacher;
-import com.geek.ms.model.Week;
+import com.geek.ms.pojo.vo.CourseTable;
+import com.geek.ms.pojo.vo.Festivals;
+import com.geek.ms.pojo.vo.StudentCourseInfo;
+import com.geek.ms.pojo.vo.StudentInfoToTeacher;
+import com.geek.ms.pojo.vo.Week;
 
 public interface CourseService {
 	

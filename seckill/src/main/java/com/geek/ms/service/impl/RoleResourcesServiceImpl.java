@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation; 
 import org.springframework.transaction.annotation.Transactional;
 
-import com.geek.ms.model.RoleResources; 
+import com.geek.ms.pojo.vo.RoleResources;
 import com.geek.ms.service.RoleResourcesService; 
 import com.geek.ms.shiro.MyShiroRealm;
 

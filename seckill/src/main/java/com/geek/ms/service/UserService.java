@@ -2,8 +2,8 @@ package com.geek.ms.service;
 
 import java.util.List;
 
-import com.geek.ms.model.Role;
-import com.geek.ms.model.User;
+import com.geek.ms.pojo.vo.Role;
+import com.geek.ms.pojo.vo.User;
 
 public interface UserService {
 

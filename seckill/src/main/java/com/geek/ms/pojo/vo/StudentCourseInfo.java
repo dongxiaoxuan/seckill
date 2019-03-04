@@ -1,4 +1,4 @@
-package com.geek.ms.model;
+package com.geek.ms.pojo.vo;
 
 import java.io.Serializable;
 import java.sql.Timestamp;

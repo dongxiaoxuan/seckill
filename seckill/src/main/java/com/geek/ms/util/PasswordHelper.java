@@ -4,7 +4,7 @@ package com.geek.ms.util;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.util.ByteSource;
 
-import com.geek.ms.model.User;
+import com.geek.ms.pojo.vo.User;
 
 public class PasswordHelper {
 	//private RandomNumberGenerator randomNumberGenerator = new SecureRandomNumberGenerator();

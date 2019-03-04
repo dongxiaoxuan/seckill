@@ -9,8 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.geek.ms.model.StudentCourseInfo;
-import com.geek.ms.model.StudentInfoToTeacher;
+import com.geek.ms.pojo.vo.StudentCourseInfo;
+import com.geek.ms.pojo.vo.StudentInfoToTeacher;
 import com.geek.ms.service.CourseService;
 import com.geek.ms.util.FormatTime;
 

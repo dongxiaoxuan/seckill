@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.geek.ms.mapper.UserMapper">
 
-	<select id="selectByUsername" parameterType="java.lang.String" resultType="com.geek.ms.model.User">
+	<select id="selectByUsername" parameterType="java.lang.String" resultType="com.geek.ms.pojo.vo.User">
 		SELECT
 			* 
 		FROM
@@ -11,11 +11,11 @@
 			username =#{username}
 	</select>
 	
-	<resultMap type="com.geek.ms.model.User" id="userRoleMap">
+	<resultMap type="com.geek.ms.pojo.vo.User" id="userRoleMap">
 		<id property="id" column="id" />
 		<result property="username" column="username" />
 		<result property="enable" column="enable" />
-		<collection property="roles" ofType="com.geek.ms.model.Role">
+		<collection property="roles" ofType="com.geek.ms.pojo.vo.Role">
 			<result property="roleName" column="roleName" />
 		</collection>
 	</resultMap>
@@ -32,15 +32,15 @@
 			#{length}
 	</select>
 
-	<select id="selectAll" resultType="com.geek.ms.model.User">
+	<select id="selectAll" resultType="com.geek.ms.pojo.vo.User">
 		select * from user
 	</select>
 
-	<insert id="addUser" parameterType="com.geek.ms.model.User">
+	<insert id="addUser" parameterType="com.geek.ms.pojo.vo.User">
 		insert into user(username, password, enable) values(#{username},#{password},#{enable});
 	</insert>
 	
-	<update id="setEnable" parameterType="com.geek.ms.model.User">
+	<update id="setEnable" parameterType="com.geek.ms.pojo.vo.User">
 		update user set enable=#{enable} where id=#{id}
 	</update>
 

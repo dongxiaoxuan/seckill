@@ -19,7 +19,7 @@
 			ci.course_id IN ( SELECT id FROM course WHERE ismust = 0 )
 	</update>
 
-	<select id="queryStudentNumberToTeacher" resultType="com.geek.ms.model.StudentInfoToTeacher">
+	<select id="queryStudentNumberToTeacher" resultType="com.geek.ms.pojo.vo.StudentInfoToTeacher">
 		SELECT
 			ci.id ciid,
 			c.NAME name,

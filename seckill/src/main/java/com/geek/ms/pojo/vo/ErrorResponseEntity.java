@@ -1,4 +1,4 @@
-package com.geek.ms.model;
+package com.geek.ms.pojo.vo;
 /**
  * 异常信息模板
  */

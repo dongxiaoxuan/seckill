@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.geek.ms.model.Role;
-import com.geek.ms.model.User;
+import com.geek.ms.pojo.vo.Role;
+import com.geek.ms.pojo.vo.User;
 import com.geek.ms.service.UserService;
 import com.geek.ms.util.PasswordHelper;
 

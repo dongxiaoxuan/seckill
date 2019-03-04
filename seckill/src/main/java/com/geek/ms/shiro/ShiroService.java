@@ -1,6 +1,6 @@
 package com.geek.ms.shiro;
 
-import com.geek.ms.model.Resources;
+import com.geek.ms.pojo.vo.Resources;
 import com.geek.ms.service.ResourcesService;
 import com.github.pagehelper.util.StringUtil;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;

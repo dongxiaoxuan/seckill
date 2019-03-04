@@ -25,9 +25,9 @@ import org.apache.shiro.util.ByteSource;
 import org.crazycake.shiro.RedisSessionDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.geek.ms.model.Resources;
-import com.geek.ms.model.Role;
-import com.geek.ms.model.User;
+import com.geek.ms.pojo.vo.Resources;
+import com.geek.ms.pojo.vo.Role;
+import com.geek.ms.pojo.vo.User;
 import com.geek.ms.service.ResourcesService;
 import com.geek.ms.service.RoleService;
 import com.geek.ms.service.UserService;

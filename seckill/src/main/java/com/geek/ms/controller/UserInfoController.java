@@ -12,9 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.geek.ms.model.Role;
-import com.geek.ms.model.UserInfo;
-import com.geek.ms.model.UserInfoDetail;
+import com.geek.ms.pojo.vo.Role;
+import com.geek.ms.pojo.vo.UserInfo;
+import com.geek.ms.pojo.vo.UserInfoDetail;
 import com.geek.ms.service.UserInfoService;
 
 @Controller

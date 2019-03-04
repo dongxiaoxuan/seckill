@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.geek.ms.model.Resources;
+import com.geek.ms.pojo.vo.Resources;
 import com.geek.ms.service.ResourcesService;
 import com.geek.ms.shiro.ShiroService;
 
