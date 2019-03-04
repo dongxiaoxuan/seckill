@@ -96,40 +96,8 @@
           </span>
                 </div>
             </div>
-
-            <!-- 菜单 -->
-            <ul class="sidebar-nav">
-            	<li class="sidebar-nav-heading">geek <span class="sidebar-nav-heading-info"> 教务列表</span></li>
-                <li class="sidebar-nav-link">
-                    <a href="index" class="active">
-                        <i class="am-icon-home sidebar-nav-link-logo"></i> 首页
-                    </a>
-                </li>
-                <li class="sidebar-nav-link">
-                    <a href="userinfo">
-                        <i class="am-icon-book sidebar-nav-link-logo"></i> 个人中心
-                    </a>
-                </li>
-                <li class="sidebar-nav-link">
-                    <a href="select">
-                        <i class="am-icon-calendar sidebar-nav-link-logo"></i> 选课管理
-                    </a>
-                </li>
-                <li class="sidebar-nav-link">
-                    <a href="form.html">
-                        <i class="am-icon-wpforms sidebar-nav-link-logo"></i> 表单
-
-                    </a>
-                </li>
-                <li class="sidebar-nav-link">
-                    <a href="chart.html">
-                        <i class="am-icon-bar-chart sidebar-nav-link-logo"></i> 图表
-
-                    </a>
-                </li>
-            </ul>
+           <div th:include="common/menu :: menu"></div>
         </div>
-
 
         <!-- 内容区域 -->
         <div class="tpl-content-wrapper">

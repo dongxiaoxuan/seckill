@@ -101,38 +101,8 @@
           </span>
                 </div>
             </div>
-
-            <!-- 菜单 -->
-            <ul class="sidebar-nav">
-            	<li class="sidebar-nav-heading">geek <span class="sidebar-nav-heading-info"> 教务列表</span></li>
-                <li class="sidebar-nav-link">
-                    <a href="index">
-                        <i class="am-icon-home sidebar-nav-link-logo"></i> 首页
-                    </a>
-                </li>
-                <li class="sidebar-nav-link">
-                    <a href="userinfo">
-                        <i class="am-icon-book sidebar-nav-link-logo"></i> 个人中心
-                    </a>
-                </li>
-                <li class="sidebar-nav-link">
-                    <a href="select" class="active">
-                        <i class="am-icon-calendar sidebar-nav-link-logo"></i> 选课管理
-                    </a>
-                </li>
-                <li class="sidebar-nav-link">
-                    <a href="form.html">
-                        <i class="am-icon-wpforms sidebar-nav-link-logo"></i> 表单
-
-                    </a>
-                </li>
-                <li class="sidebar-nav-link">
-                    <a href="chart.html">
-                        <i class="am-icon-bar-chart sidebar-nav-link-logo"></i> 图表
-
-                    </a>
-                </li>
-            </ul>
+			<div th:include="common/menu :: menu"></div>
+            
         </div>
 
 
@@ -141,35 +111,60 @@
 		<div  id="tpl-echarts"></div>
             <div class="row-content am-cf">
             <shiro:hasRole name="student">
-            
              <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
                         <div class="widget am-cf">
                             <div class="widget-head am-cf">
                                 <div class="widget-title am-fl">选课界面</div>
                                 <div class="widget-function am-fr">
-                                    <a href="javascript:;" class="am-icon-cog"></a>
+                                    <a href="javascript:;" class="am-icon-cog i"></a>
                                 </div>
                             </div>
                             <th:block th:if="${isOpen}">
                             <div class="widget-body  widget-body-lg am-fr">
-                                <table class="am-table am-table-compact tpl-table-black ">
+                                <table style="" class="am-table am-table-compact tpl-table-black am-table-centered am-text-middle">
                                 	<tr>
-                                		<th style="border-top: 0;">选择</th>
+                                		<th style="border-top: 0;">状态</th>
                                 		<th style="border-top: 0;">课程名称</th>
                                 		<th style="border-top: 0;">授课教师</th>
                                 		<th style="border-top: 0;">所属学院</th>
                                 		<th style="border-top: 0;">课程余量</th>
                                 	</tr>
-                                	<tr th:each="c : ${cms}">
-                                		<td>
-                                			<label class="am-checkbox">
-										      <input type="checkbox" class="cbx" th:value="${c.getId()}" data-am-ucheck required minchecked="0" maxchecked="3">
-										    </label>
-                                		</td>
-                                		<td th:text="${c.getName()}"></td>
-                                		<td th:text="${c.getRealName()}"></td>
-                                		<td th:text="${c.getCollege()}"></td>
-                                		<td th:text="${c.getAmount()}"></td>
+                                	<tr style="height:55px;" th:each="c,i : ${cms}" class="otherStudentSpan">
+                                		<th:block th:each="cs : ${csLists}">
+                                			<th:block th:if="${cs.getCiid() == c.getId()}">
+                                			
+                                				<th:block th:if="${!cs.isHaveCurrentUserId()}">
+                                				
+                                					<td style="vertical-align:middle;" th:if="${!#lists.isEmpty(c.getCiid()) }">
+                                						<i  style="color:#009933;" class="am-icon-circle-o am-text-success tpl-user-panel-status-icon"></i>
+                                						已选
+                                					</td>
+                                					
+                                					<td style="vertical-align:middle;" th:if="${#lists.isEmpty(c.getCiid()) }">
+                                						<label >
+													      <input type="checkbox" class="cbx" th:value="${c.getId()}" required>
+													    </label>
+                                					</td>
+                                					
+                                				</th:block>
+                                				
+                                				<th:block th:if="${cs.isHaveCurrentUserId()}">
+							            			<td style="vertical-align:middle;">
+		                                				<i style="color:#009933;" class="am-icon-check"></i>&nbsp;
+		                                				<button type="button" th:id="dropbutt + ${c.getId()}" class="am-btn am-btn-warning am-round am-btn-xs btn-loading-example dropbutt"
+																data-am-loading="{spinner: 'circle-o-notch', loadingText: '退课中...'}">退课</button>
+													</td>
+								            	</th:block>
+                                				
+                                			</th:block>
+                                		
+	                                		
+                                		</th:block>
+                                		
+                                		<td style="vertical-align:middle;" th:text="${c.getName()}"></td>
+                                		<td style="vertical-align:middle;" th:text="${c.getRealName()}"></td>
+                                		<td style="vertical-align:middle;" th:text="${c.getCollege()}"></td>
+                                		<td style="vertical-align:middle;" th:text="${amounts.get(i.index)}"></td>
                                 	</tr>
                                 </table>
                                 <div id="buttDiv">
@@ -178,7 +173,7 @@
                                 
 									<li th:each="i : ${#numbers.sequence(1, page)}"><a href="#"  th:text="${i}" th:id="page+${i}" class="pagebutt">1</a></li>
 								
-								<li style="float:right;"><button  type="button" class="am-btn am-btn-primary btn-loading-example"
+								<li style="float:right;"><button  type="button" class="am-btn am-btn-primary btn-loading-example submitbutt"
 										data-am-loading="{spinner: 'circle-o-notch', loadingText: '提交中...'}">提交</button></li>
 								</ul>
 									
@@ -195,12 +190,18 @@
 			                </th:block>
                         </div>
                 </div>
-                
               </shiro:hasRole>
+              
               <shiro:hasRole name="admin">
               		<div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
                         <div class="widget am-cf">
-                        	<div class="widget-title am-fl">选课功能</div>
+                        	<div class="widget-head am-cf">
+                                <div class="widget-title am-fl">选课管理</div>
+                                <div class="widget-function am-fr">
+                                    <a href="javascript:;" class="am-icon-cog"></a>
+                                </div>
+                            </div>
+                            
                         	<table class="am-table am-table-compact tpl-table-black ">
                         		<tr>
                                		<th style="border-top: 0;">状态</th>
@@ -218,19 +219,38 @@
                                		
                                	</tr>
                         	</table>
+                        	
+                        	<th:block th:if="${!isOpen}">
+                        	<div class="widget-head am-cf">
+                                <div class="widget-title am-fl">余量载入</div>
+                            </div>
+                            <table class="am-table am-table-compact tpl-table-black ">
+                        		<tr>
+                               		<th style="border-top: 0;">课程名称</th>
+                               		<th style="border-top: 0;">授课教师</th>
+                               		<th style="border-top: 0;">所属学院</th>
+                               		<th style="border-top: 0;">课程余量</th>
+                               	</tr>
+                               	<tr th:each="c : ${cms}">
+                               		<td th:text="${c.getName()}"></td>
+                               		<td th:text="${c.getRealName()}"></td>
+                               		<td th:text="${c.getCollege()}"></td>
+                               		<td><input type="text" th:id="amount + ${c.getId()}" th:name="amount + ${c.getId()}" class="am-form-field am-round amount" /></td>
+                               	</tr>
+                        	</table>
+                            </th:block>
                         </div>
                     </div>
               </shiro:hasRole>
             </div>
         </div>
     </div>
-    
     <script src="assets/js/amazeui.min.js"></script>
     <script src="assets/js/amazeui.datatables.min.js"></script>
     <script src="assets/js/dataTables.responsive.min.js"></script>
     <script src="assets/js/app.js"></script>
     <script type="text/javascript">
-    $('.btn-loading-example').click(function() {
+    $('.submitbutt').click(function() {
     	if($('input:checked').length > 3) {
     		alert("选课数量不能超过3科，请重新选择");
     	}else if($('input:checked').length == 0){
@@ -253,10 +273,15 @@
         		contentType: "application/json",
         		dataType : 'json',
         		success : function(result) {
-        			alert(result);
+        			var str = "";
+        			for(var key in result){
+        				str += key + ":" +result[key] +"\r\n";
+        			}
+        			alert(str);
+        			window.location.href="select";
         		},
         		error : function(result) {
-        			alert("失败");
+        			alert("失败,请重试");
         		}
         	});
     	}
@@ -270,13 +295,51 @@
 		$("#hiddenForm1").submit();
 	});
 	$(".openclose").on("click", function() {
-		var open = $(this).attr('id');
-		$.ajax({
+		var open = parseInt($(this).attr('id'));
+		if(open == 1) {
+			var array = [];
+			$(".amount").each(function(i) {
+				array.push($(this).val());
+			})
+			$.ajax({
+	    		url : 'select/open',
+	    		type : 'post',
+	    		data : {
+	    			open : open,
+	    			amounts : array.toLocaleString()
+	    		},
+	    		success : function(result) {
+	    			alert("操作成功");
+	    			window.location.href="select";
+	    		},
+	    		error : function(result) {
+	    			alert("失败");
+	    		}
+	    	});
+		}else {
+			$.ajax({
     		url : 'select/open',
     		type : 'post',
     		data : {open : open},
     		success : function(result) {
     			alert("操作成功");
+    			window.location.href="select";
+    		},
+    		error : function(result) {
+    			alert("失败");
+    		}
+    	});
+		}
+		
+	});
+	$(".dropbutt").on("click", function() {
+		var ciid = parseInt($(this).attr("id").substr(8,1));
+		$.ajax({
+    		url : 'select/delete',
+    		type : 'post',
+    		data : {ciid : ciid},
+    		success : function(result) {
+    			alert("操作成功" + result);
     			window.location.href="select";
     		},
     		error : function(result) {

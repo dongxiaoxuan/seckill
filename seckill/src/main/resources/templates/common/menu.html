@@ -1,7 +1,7 @@
 <div th:fragment="menu">
 <div id="sidebar">
-	<ul id="menu">
-	
+	<ul class="sidebar-nav" id="menu">
+		<li class="sidebar-nav-heading">geek <span class="sidebar-nav-heading-info"> 教务列表</span></li>
 	</ul>
 </div>
 <script type="text/javascript" th:src="@{/js/jquery-1.11.2.min.js}"></script>
@@ -13,8 +13,12 @@
 		dataType : 'json',
 		success : function(data) {
 			var html = "";
+			var iconArr = new Array(data.length + 10);
+			iconArr[0] = "home";iconArr[1] = "book";iconArr[2] = "calendar";
+			iconArr[3] = "wpforms";iconArr[4] = "bar-chart";iconArr[5] = "bars";
+			iconArr[6] = "artstation";iconArr[7] = "accusoft";
 			for(var i = 0; i < data.length; i ++) {
-				html += "<li><a href='"+data[i].url+"'>"+data[i].name+"</a> </li>"
+				html += '<li class="sidebar-nav-link"><a href="' + data[i].url + '"><i class="am-icon-' + iconArr[i] +' sidebar-nav-link-logo"></i> ' +data[i].name+ '</a></li>'
 			}
 			$("#menu").append(html);
 			$("#menu li a").each(function(){

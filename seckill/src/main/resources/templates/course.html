@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>geek教务个人中心</title>
+    <title>geek教务课程管理</title>
     <meta name="description" content="这是一个 index 页面">
     <meta name="keywords" content="index">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,6 +17,11 @@
     <link rel="stylesheet" href="assets/css/amazeui.datatables.min.css" />
     <link rel="stylesheet" href="assets/css/app.css">
     <script src="assets/js/jquery.min.js"></script>
+    <style>
+    	th,td {
+	    	text-align: center;
+    	}
+    </style>
 </head>
 
 <body data-type="index">
@@ -93,11 +98,11 @@
                     </div>
                     <span class="user-panel-logged-in-text">
               <i class="am-icon-circle-o am-text-success tpl-user-panel-status-icon"></i>
-              <span th:text="${session.userSession.username}"></span>
+             <span th:text="${session.userSession.username}"></span>
           </span>
                 </div>
             </div>
-			<div th:include="common/menu :: menu"></div>
+            <div th:include="common/menu :: menu"></div>
         </div>
 
 
@@ -105,85 +110,63 @@
         <div class="tpl-content-wrapper">
 		<div  id="tpl-echarts"></div>
             <div class="row-content am-cf">
-            <form id="infoForm" action="#" th:action="@{/userinfo/updateInfo}" class="am-form tpl-form-line-form">
-				<div class="row">
-                    <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+            
+            	<shiro:hasRole name="student">
+            	<div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
                         <div class="widget am-cf">
                             <div class="widget-head am-cf">
-                                <div class="widget-title am-fl">基本信息</div>
+                                <div class="widget-title am-fl">课程表</div>
                                 <div class="widget-function am-fr">
                                     <a href="javascript:;" class="am-icon-cog"></a>
                                 </div>
                             </div>
-                            <div class="widget-body am-fr">
-                                
-                                	<th:block th:each="m,i : ${commentMap}">
-                                    <div class="am-form-group am-u-sm-12 am-u-md-12 am-u-lg-6">
-                                        <label for="user-name" class="am-u-sm-3 am-form-label" th:text="${m.key.getChineseCol()}"></label>
-                                        <div class="am-u-sm-9">
-                                        <th:block th:if="${m.key.getEnable() == 1}">
-                                            <input type="text" th:name="${m.key.getColName()}" class="tpl-form-input" th:value="${m.value}">
-                                        </th:block>
-                                        <th:block th:if="${m.key.getEnable() == 0}">
-                                            <input style="border-color:white;" th:name="${m.key.getColName()}" type="text" class="tpl-form-input noupdate" th:value="${m.value}" disabled="disabled">
-                                        </th:block>
-                                        </div>
-                                    </div>
-                                    </th:block>
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <th:block th:each="rn : ${roleNameMap}">
-                <shiro:authenticated>
-                <div class="row">
-                    <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
-                        <div class="widget am-cf">
-                            <div class="widget-head am-cf">
-                                <div class="widget-title am-fl" th:text="${rn.value} + 信息"></div>
-                                <div class="widget-function am-fr">
-                                    <a href="javascript:;" class="am-icon-cog"></a>
-                                </div>
-                            </div>
-                            <div class="widget-body am-fr">
-                               	<th:block th:each="m,i : ${privateMap}">
-                                   <div class="am-form-group am-u-sm-12 am-u-md-12 am-u-lg-6">
-                                       <label for="user-name" class="am-u-sm-3 am-form-label" th:text="${m.key.getChineseCol()}"></label>
-                                       <div class="am-u-sm-9">
-                                       <th:block th:if="${m.key.getEnable() == 1}">
-                                           <input type="text" th:name="${m.key.getColName()}" class="tpl-form-input" th:value="${m.value}">
-                                       </th:block>
-                                       <th:block th:if="${m.key.getEnable() == 0}">
-                                           <input style="border-color:white;" th:name="${m.key.getColName()}" type="text" class="tpl-form-input noupdate" th:value="${m.value}" disabled="disabled">
-                                       </th:block>
-                                       </div>
-                                   </div>
-                                   </th:block>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                </shiro:authenticated>
-                </th:block>
-                <button id="updateInfoButt" style="float:right;" type="button" class="am-btn am-btn-default am-btn-secondary"><span class="am-icon-save"></span>&nbsp;保存</button>
-                </form>
+                            <div class="widget-body  widget-body-lg am-fr">
+
+                                <table style="border-top:0;border-left:0;border-right:0;table-layout: fixed;" class="am-table am-table-compact am-table-bordered am-table-radius tpl-table-black " >
+                                    <thead>
+                                        <tr style="border:0;">
+                                        	<th style="border:0;">节次</th>
+            								<th style="border:0;" th:each="w : ${weeks}" th:id="week + ${w.getId()}" th:text="${w.getName()}"></th>
+            							</tr>
+            						</thead>
+            						<tbody>
+            							<tr style="" th:each="f : ${festivals}" th:id="festivals + ${f.getId()}">
+            								<th:block  th:if="${f.getMark() == 0}">
+            									<td class="other" colspan="8" th:text="${f.getName()}"></td>
+            								</th:block>
+            								<th:block th:if="${f.getMark() != 0}">
+		           								<td class="course" th:if="${f.getMark() == 1}" th:text="${f.getName()}"></td>
+		           								<th:block th:each="w : ${weeks}">
+		           								<td style="vertical-align:middle;" th:id="course + ${w.getId() + '_' + f.getId()}"></td>
+		           								</th:block>
+            								
+            								</th:block>
+            							</tr>
+            						</tbody>
+            					</table>
+            				</div>
+            			</div>
+            	</div>
+            	</shiro:hasRole>
+            	
             </div>
         </div>
     </div>
+    
     <script src="assets/js/amazeui.min.js"></script>
     <script src="assets/js/amazeui.datatables.min.js"></script>
     <script src="assets/js/dataTables.responsive.min.js"></script>
     <script src="assets/js/app.js"></script>
-    <script type="text/javascript">
-    	$(function(){
-    		$("#updateInfoButt").click(function(){
-    			alert("保存成功");
-    			$("#infoForm").submit();
-    		});
-    	});
-    </script>
+	<script th:inline="javascript">
+		$(function() {
+			$(".other").css("height", "15px");
+			$(".course").css("height", "90px");
+			var jsonData = [[${courses}]];
+			for(var i = 0; i < jsonData.length; i ++) {
+				$("#course" + jsonData[i].wid + "_" + jsonData[i].fid).html(jsonData[i].name + '<br>(' + jsonData[i].realName + ')');
+			}
+		})
+	</script>
 </body>
 
 </html>
