@@ -10,7 +10,7 @@ public interface SeckillCouresService {
 	
 	int seckillCoures(int couresInfoId, int studentId);
 	
-	List<CourseModel> loadCourse(int start, int length);
+	List<CourseModel> loadCourse(Integer start, Integer length, Integer id);
 	
 	Integer getCourseCount();
 	
@@ -18,4 +18,17 @@ public interface SeckillCouresService {
 	
 	int openOrClose(Integer open);
 	
+	Integer dropCourseById(Integer userId, Integer ciid);
+	
+	void saveDataWhenClose(int couresInfoId);
+	
+	String getAmountFromRedis(int courseId);
+	
+	void setAmountToRedis(int courseId, int amount);
+	
+	List<?> getCourseStudentListFromRedis(int courseId);
+	
+	List<Integer> loadAllCourseId();
+	
+	int clearAllAmount();
 }

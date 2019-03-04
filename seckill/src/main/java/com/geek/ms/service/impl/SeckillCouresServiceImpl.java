@@ -2,6 +2,7 @@ package com.geek.ms.service.impl;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -17,9 +18,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.geek.ms.mapper.CouresInfoMapper;
-import com.geek.ms.mapper.StudentCouresInfoMapper;
+import com.geek.ms.mapper.StudentCourseInfoMapper;
 import com.geek.ms.model.CourseModel;
-import com.geek.ms.model.StudentCouresInfo;
+import com.geek.ms.model.StudentCourseInfo;
 import com.geek.ms.service.SeckillCouresService;
 
 import redis.clients.jedis.Jedis;
@@ -40,7 +41,7 @@ public class SeckillCouresServiceImpl implements SeckillCouresService{
 	private CouresInfoMapper couresInfoMapper;
 	
 	@Autowired
-	private StudentCouresInfoMapper studentCouresInfoMapper;
+	private StudentCourseInfoMapper studentCouresInfoMapper;
 	
 	@Autowired
 	private JedisPool jedisPool;
@@ -55,7 +56,7 @@ public class SeckillCouresServiceImpl implements SeckillCouresService{
 		Long times = size % SIZE ==0 ? size/SIZE : size/SIZE + 1;
 		//最终操作数据数量
 		int count = 0;
-		List<StudentCouresInfo> studentCouresInfos = new ArrayList<>(SIZE);
+		List<StudentCourseInfo> studentCouresInfos = new ArrayList<>(SIZE);
 		for(int i = 0; i < times; i ++) {
 			//临时列表
 			List<?> temporaries = null;
@@ -67,11 +68,11 @@ public class SeckillCouresServiceImpl implements SeckillCouresService{
 			studentCouresInfos.clear();
 			//开始保存
 			for (int j = 0; j < temporaries.size(); j ++) {
-				String[] listArr = temporaries.get(j).toString().split("-");
-				int studentId = Integer.parseInt(listArr[0]);
-				Timestamp time = new Timestamp(Long.parseLong(listArr[1]));
+				String list = temporaries.get(j).toString();
+				int studentId = Integer.parseInt(list);
+				Timestamp time = new Timestamp(new Date().getTime());
 				
-				StudentCouresInfo studentCouresInfo = new StudentCouresInfo();
+				StudentCourseInfo studentCouresInfo = new StudentCourseInfo();
 				studentCouresInfo.setUserId(studentId);
 				studentCouresInfo.setTimestamp(time);
 				studentCouresInfo.setCouresInfoId(couresInfoId);
@@ -79,8 +80,8 @@ public class SeckillCouresServiceImpl implements SeckillCouresService{
 			}
 			//操作数据库
 			int length = studentCouresInfos.size();
-			couresInfoMapper.desAllAmount(length, couresInfoId);
-			count = studentCouresInfoMapper.addAllStudentCoures(studentCouresInfos);
+			couresInfoMapper.desAllAmount(length, couresInfoId);//更新数据库选课量
+			count = studentCouresInfoMapper.addAllStudentCoures(studentCouresInfos);//插入所有选课信息
 			logger.info("导入成功");
 		}
 		redisTemplate.delete("coures_student_list_" + couresInfoId);
@@ -102,7 +103,7 @@ public class SeckillCouresServiceImpl implements SeckillCouresService{
 	@Override
 	@Transactional(isolation = Isolation.READ_COMMITTED, propagation=Propagation.REQUIRED, readOnly=false, rollbackFor={Exception.class})
 	public int seckillCoures(int couresInfoId, int studentId) {
-		String args = studentId + "-" + System.currentTimeMillis();
+		String args = studentId + "";
 		int result = -1;
 		Jedis jedis = jedisPool.getResource();
 		try {
@@ -125,8 +126,8 @@ public class SeckillCouresServiceImpl implements SeckillCouresService{
 	}
 
 	@Override
-	public List<CourseModel> loadCourse(int start, int length) {
-		return studentCouresInfoMapper.loadCourse(start, length);
+	public List<CourseModel> loadCourse(Integer start, Integer length, Integer id) {
+		return studentCouresInfoMapper.loadCourse(start, length, id);
 	}
 	
 	public Integer getCourseCount() {
@@ -147,5 +148,43 @@ public class SeckillCouresServiceImpl implements SeckillCouresService{
 	public int openOrClose(Integer open) {
 		return studentCouresInfoMapper.openOrClose(open);
 	}
+
+	@Override
+	public Integer dropCourseById(Integer userId, Integer ciid) {
+		return studentCouresInfoMapper.dropCourseById(userId, ciid);
+	}
+
+	@Override
+	public void saveDataWhenClose(int couresInfoId) {
+		saveStudentCouresInfo(couresInfoId);
+	}
+
+	@Override
+	public String getAmountFromRedis(int courseId) {
+		String amount = (String) redisTemplate.opsForHash().get("coures_student_" + courseId, "amount");
+		return amount;
+	}
+
+	@Override
+	public void setAmountToRedis(int courseId, int amount) {
+		redisTemplate.opsForHash().put("coures_student_" + String.valueOf(courseId), "amount", String.valueOf(amount));
+	}
 	
+	@Override
+	public List<?> getCourseStudentListFromRedis(int courseId) {
+		Long size = redisTemplate.opsForList().size("coures_student_list_" + String.valueOf(courseId));
+		List<?> csList = (List<?>) redisTemplate.opsForList().range("coures_student_list_" + String.valueOf(courseId), 0, size);
+		return csList;
+	}
+	
+	@Override
+	public List<Integer> loadAllCourseId() {
+		return studentCouresInfoMapper.loadAllCourseId();
+	}
+
+	@Override
+	public int clearAllAmount() {
+		return couresInfoMapper.clearAllAmount();
+	}
+
 }

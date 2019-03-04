@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 
-import com.geek.ms.model.StudentCouresInfo;
+import com.geek.ms.model.StudentCourseInfo;
 import com.geek.ms.service.SeckillCouresService;
 import com.geek.ms.util.BeanString;
 
@@ -20,7 +20,7 @@ public class MqReceiver {
 	@RabbitListener(queues = "${seckill.queue.name}", containerFactory = "singleListenerContainer")
 	public void receiveSeckill(@Payload byte[] message) {
 		try {
-			StudentCouresInfo s = BeanString.stringToBean(new String(message,"UTF-8"), StudentCouresInfo.class);
+			StudentCourseInfo s = BeanString.stringToBean(new String(message,"UTF-8"), StudentCourseInfo.class);
 			System.out.println("消费端：" +s.getCouresInfoId()+ "," + s.getUserId());
 			seckillCouresService.seckillCoures(s.getCouresInfoId(), s.getUserId());
 		}catch (Exception e) {
