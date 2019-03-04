@@ -3,11 +3,11 @@ package com.geek.ms.mapper;
 import java.util.List;
 
 import com.geek.ms.model.CourseModel;
-import com.geek.ms.model.StudentCouresInfo;
+import com.geek.ms.model.StudentCourseInfo;
 
 public interface StudentCourseInfoMapper {
 
-	int addAllStudentCoures(List<StudentCouresInfo> list);
+	int addAllStudentCoures(List<StudentCourseInfo> list);
 	
 	List<CourseModel> loadCourse(Integer start, Integer length, Integer id);
 	
@@ -21,5 +21,5 @@ public interface StudentCourseInfoMapper {
 	
 	List<Integer> loadAllCourseId();
 	
-	List<StudentCouresInfo> queryAllSciByTime(String start, String end);
+	List<StudentCourseInfo> queryAllSciByTime(String start, int id);
 }

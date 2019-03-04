@@ -21,6 +21,7 @@
 
 	<select id="queryStudentNumberToTeacher" resultType="com.geek.ms.model.StudentInfoToTeacher">
 		SELECT
+			ci.id ciid,
 			c.NAME name,
 			ci.student_number number
 		FROM

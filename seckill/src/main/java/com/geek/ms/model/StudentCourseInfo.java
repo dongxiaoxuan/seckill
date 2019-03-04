@@ -2,6 +2,7 @@ package com.geek.ms.model;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 
 public class StudentCourseInfo implements Serializable{
 
@@ -11,15 +12,17 @@ public class StudentCourseInfo implements Serializable{
 	private int userId;
 	private int couresInfoId;
 	private Timestamp timestamp;
+	private List<UserInfo> userInfo;
 	public StudentCourseInfo() {
 		super();
 	}
-	public StudentCourseInfo(int id, int userId, int couresInfoId, Timestamp timestamp) {
+	public StudentCourseInfo(int id, int userId, int couresInfoId, Timestamp timestamp, List<UserInfo> userInfo) {
 		super();
 		this.id = id;
 		this.userId = userId;
 		this.couresInfoId = couresInfoId;
 		this.timestamp = timestamp;
+		this.userInfo = userInfo;
 	}
 	public int getId() {
 		return id;
@@ -45,10 +48,17 @@ public class StudentCourseInfo implements Serializable{
 	public void setTimestamp(Timestamp timestamp) {
 		this.timestamp = timestamp;
 	}
+	public List<UserInfo> getUserInfo() {
+		return userInfo;
+	}
+	public void setUserInfo(List<UserInfo> userInfo) {
+		this.userInfo = userInfo;
+	}
 	@Override
 	public String toString() {
-		return "StudentCouresInfo [id=" + id + ", userId=" + userId + ", couresInfoId=" + couresInfoId
-				+ ", timestamp=" + timestamp + "]";
+		return "StudentCourseInfo [id=" + id + ", userId=" + userId + ", couresInfoId=" + couresInfoId + ", timestamp="
+				+ timestamp + ", userInfo=" + userInfo + "]";
 	}
+	
 	
 }

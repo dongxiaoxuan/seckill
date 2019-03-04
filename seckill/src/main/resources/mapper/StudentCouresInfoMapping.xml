@@ -1,28 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.geek.ms.mapper.StudentCouresInfoMapper">
+<mapper namespace="com.geek.ms.mapper.StudentCourseInfoMapper">
 
 	<insert id="addAllStudentCoures" parameterType="java.util.List">
-		insert into student_coures_info(student_id,coures_info_id,time)
+		insert into student_course_info(user_id,course_info_id,time)
 		values
 		<foreach collection="list" item="item" index="index" separator=",">
             (${item.userId}, ${item.couresInfoId}, #{item.timestamp})
         </foreach>
 	</insert>
 	
+	<select id="loadAllCourseId" resultType="java.lang.Integer">
+		SELECT id FROM course where ismust = 0
+	</select>
+	
 	<select id="loadCourse" resultType="com.geek.ms.model.CourseModel">
 		SELECT
 			ci.id,
-			c.name,
+			c.NAME,
 			ui.user_id,
 			ui.realName,
 			ui.college,
-			ci.amount 
+			sci.course_info_id ciid 
 		FROM
-			coures_info ci
-			LEFT JOIN course c ON ci.coures_id = c.id
+			course_info ci
+			LEFT JOIN course c ON ci.course_id = c.id
 			LEFT JOIN user_info ui ON ci.user_id = ui.user_id
-		where c.ismust=0
+			LEFT JOIN ( SELECT course_info_id FROM student_course_info WHERE user_id = #{id} ) sci ON ci.id = sci.course_info_id 
+		WHERE
+			c.ismust =0
+			order by ci.id
 			LIMIT #{start},
 			#{length}
 	</select>
@@ -36,6 +43,32 @@
 			c.ismust=0	
 	</select>
 	
+	<resultMap type="com.geek.ms.model.StudentCourseInfo" id="sciMap">
+		<result column="couresInfoId" property="couresInfoId" jdbcType="INTEGER"/>
+		<collection property="userInfo" ofType="com.geek.ms.model.UserInfo">
+			<result column="number" property="number" />
+			<result column="realName" property="realName" />
+			<result column="college" property="college" />
+		</collection>
+	</resultMap>
+	
+	<select id="queryAllSciByTime" resultMap="sciMap">
+		SELECT
+			sci.course_info_id couresInfoId,
+			ui.number,
+			ui.realName,
+			ui.college 
+		FROM
+			student_course_info sci
+			LEFT JOIN user_info ui ON sci.user_id = ui.user_id
+			LEFT JOIN course_info ci ON sci.course_info_id = ci.id 
+		WHERE
+			unix_timestamp( time ) BETWEEN unix_timestamp( #{start} ) 
+			AND unix_timestamp( NOW( ) ) 
+			AND ci.user_id = #{id}
+			
+	</select>	
+	
 	<select id="isOpen" resultType="java.lang.Integer">
 		select open from resources where url='/select/seckill'
 	</select>
@@ -43,5 +76,9 @@
 	<update id="openOrClose">
 		update resources set open=#{open} where url='/select/seckill'
 	</update>
+	
+	<delete id="dropCourseById">
+		delete from student_course_info where user_id = #{userId} and course_info_id = #{ciid}
+	</delete>
 
 </mapper>
