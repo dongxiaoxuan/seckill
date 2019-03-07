@@ -3,10 +3,10 @@
 <mapper namespace="com.geek.ms.mapper.StudentCourseInfoMapper">
 
 	<insert id="addAllStudentCoures" parameterType="java.util.List">
-		insert into student_course_info(user_id,course_info_id,time)
+		insert into student_course_info(user_id,course_info_id,time,years_id)
 		values
 		<foreach collection="list" item="item" index="index" separator=",">
-            (${item.userId}, ${item.couresInfoId}, #{item.timestamp})
+            (${item.userId}, ${item.couresInfoId}, #{item.timestamp}, ${item.yearsId})
         </foreach>
 	</insert>
 	
@@ -20,13 +20,14 @@
 			c.NAME,
 			ui.user_id,
 			ui.realName,
-			ui.college,
+			cg.name college ,
 			sci.course_info_id ciid 
 		FROM
 			course_info ci
 			LEFT JOIN course c ON ci.course_id = c.id
 			LEFT JOIN user_info ui ON ci.user_id = ui.user_id
 			LEFT JOIN ( SELECT course_info_id FROM student_course_info WHERE user_id = #{id} ) sci ON ci.id = sci.course_info_id 
+			left join college cg on ui.college_id = cg.id
 		WHERE
 			c.ismust =0
 			order by ci.id
@@ -46,6 +47,7 @@
 	<resultMap type="com.geek.ms.pojo.vo.StudentCourseInfo" id="sciMap">
 		<result column="couresInfoId" property="couresInfoId" jdbcType="INTEGER"/>
 		<collection property="userInfo" ofType="com.geek.ms.pojo.vo.UserInfo">
+			<result column="userId" property="userId" />
 			<result column="number" property="number" />
 			<result column="realName" property="realName" />
 			<result column="college" property="college" />
@@ -55,13 +57,15 @@
 	<select id="queryAllSciByTime" resultMap="sciMap">
 		SELECT
 			sci.course_info_id couresInfoId,
+			ui.user_id userId,
 			ui.number,
 			ui.realName,
-			ui.college 
+			cg.name college 
 		FROM
 			student_course_info sci
 			LEFT JOIN user_info ui ON sci.user_id = ui.user_id
 			LEFT JOIN course_info ci ON sci.course_info_id = ci.id 
+			left join college cg on ui.college_id = cg.id
 		WHERE
 			unix_timestamp( time ) BETWEEN unix_timestamp( #{start} ) 
 			AND unix_timestamp( NOW( ) ) 

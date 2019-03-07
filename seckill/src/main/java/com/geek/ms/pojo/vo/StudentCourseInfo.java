@@ -13,16 +13,18 @@ public class StudentCourseInfo implements Serializable{
 	private int couresInfoId;
 	private Timestamp timestamp;
 	private List<UserInfo> userInfo;
+	private int yearsId;
 	public StudentCourseInfo() {
 		super();
 	}
-	public StudentCourseInfo(int id, int userId, int couresInfoId, Timestamp timestamp, List<UserInfo> userInfo) {
+	public StudentCourseInfo(int id, int userId, int couresInfoId, Timestamp timestamp, List<UserInfo> userInfo, int yearsId) {
 		super();
 		this.id = id;
 		this.userId = userId;
 		this.couresInfoId = couresInfoId;
 		this.timestamp = timestamp;
 		this.userInfo = userInfo;
+		this.yearsId = yearsId;
 	}
 	public int getId() {
 		return id;
@@ -54,11 +56,16 @@ public class StudentCourseInfo implements Serializable{
 	public void setUserInfo(List<UserInfo> userInfo) {
 		this.userInfo = userInfo;
 	}
+	public int getYearsId() {
+		return yearsId;
+	}
+	public void setYearsId(int yearsId) {
+		this.yearsId = yearsId;
+	}
 	@Override
 	public String toString() {
 		return "StudentCourseInfo [id=" + id + ", userId=" + userId + ", couresInfoId=" + couresInfoId + ", timestamp="
-				+ timestamp + ", userInfo=" + userInfo + "]";
+				+ timestamp + ", userInfo=" + userInfo + ", yearsId=" + yearsId + "]";
 	}
-	
 	
 }

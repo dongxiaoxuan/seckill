@@ -40,7 +40,6 @@
 			<artifactId>mybatis-spring-boot-starter</artifactId>
 			<version>2.0.0</version>
 		</dependency>
-		<!-- 实现热部署 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
@@ -118,6 +117,26 @@
             <artifactId>pagehelper-spring-boot-starter</artifactId>
             <version>1.2.3</version>
         </dependency>
+        <dependency>
+	        <groupId>com.google.code.gson</groupId>
+	        <artifactId>gson</artifactId>
+	    </dependency>
+	    <!-- ElasticSearch -->
+	   <dependency>
+	     <groupId>org.elasticsearch</groupId>
+	     <artifactId>elasticsearch</artifactId>
+	   </dependency>
+	   <!-- Java High Level REST Client -->
+	   <dependency>
+	     <groupId>org.elasticsearch.client</groupId>
+	     <artifactId>elasticsearch-rest-high-level-client</artifactId>
+	     <exclusions>
+	       <exclusion>
+	         <groupId>org.elasticsearch</groupId>
+	         <artifactId>elasticsearch</artifactId>
+	       </exclusion>
+	     </exclusions>
+	   </dependency>
 	</dependencies>
 
 	<build>

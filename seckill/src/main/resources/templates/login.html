@@ -3,16 +3,28 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-<title>登录</title>
+
+<link rel="icon" type="image/png" th:href="@{/assets/i/favicon.png}">
+<link rel="stylesheet" th:href="@{/assets/css/amazeui.min.css}" />
+    <link rel="stylesheet" th:href="@{/assets/css/amazeui.datatables.min.css}" />
+    <link rel="stylesheet" th:href="@{/assets/css/app.css}">
+<title>geek教务系统登录</title>
 </head>
-<body>
+<body data-type="login" style="background-color:#F0F0F0;">
 	<div id="loginbox">
+	<div class="tpl-login-content">
+                <div style="text-align: center;"><img src="assets/img/logoa.png" alt=""></div>
 		<span th:text="${msg}"></span>
-		<form id="loginform" class="form-vertical" th:action="@{/login}" method="post">
-			<input type="text" id="username" name="username" placeholder="Username" autocomplete="" />
-			<input type="password" id="password" name="password" placeholder="Password" />
-			<a type="submit" href="javascript:$('#loginform').submit();">Login</a>
+		<form id="loginform" class="am-form tpl-form-line-form form-vertical" th:action="@{/login}" method="get">
+		<div class="am-form-group">
+			<input type="text" class="tpl-form-input" id="username" name="username" placeholder="Username" autocomplete="" />
+		</div>
+		<div class="am-form-group">
+			<input type="password" class="tpl-form-input" id="password" name="password" placeholder="Password" />
+		</div>
+			<a class="am-btn am-btn-primary  am-btn-block tpl-btn-bg-color-success  tpl-login-btn" type="submit" href="javascript:$('#loginform').submit();">Login</a>
 		</form>
+	</div>
 	</div>
 </body>
 <script type="text/javascript" th:src="@{/js/jquery-1.11.2.min.js}"></script>

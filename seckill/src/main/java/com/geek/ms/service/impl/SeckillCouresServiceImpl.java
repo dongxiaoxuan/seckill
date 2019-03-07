@@ -18,7 +18,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.geek.ms.mapper.CouresInfoMapper;
+import com.geek.ms.mapper.ScoreMapper;
 import com.geek.ms.mapper.StudentCourseInfoMapper;
+import com.geek.ms.pojo.po.Years;
 import com.geek.ms.pojo.vo.CourseModel;
 import com.geek.ms.pojo.vo.StudentCourseInfo;
 import com.geek.ms.service.SeckillCouresService;
@@ -42,6 +44,9 @@ public class SeckillCouresServiceImpl implements SeckillCouresService{
 	
 	@Autowired
 	private StudentCourseInfoMapper studentCouresInfoMapper;
+	
+	@Autowired
+	private ScoreMapper scoreMapper;
 	
 	@Autowired
 	private JedisPool jedisPool;
@@ -73,6 +78,8 @@ public class SeckillCouresServiceImpl implements SeckillCouresService{
 				Timestamp time = new Timestamp(new Date().getTime());
 				
 				StudentCourseInfo studentCouresInfo = new StudentCourseInfo();
+				Years nowYears = scoreMapper.queryStudentYears(studentId);
+				studentCouresInfo.setYearsId(nowYears.getId());
 				studentCouresInfo.setUserId(studentId);
 				studentCouresInfo.setTimestamp(time);
 				studentCouresInfo.setCouresInfoId(couresInfoId);
@@ -81,6 +88,7 @@ public class SeckillCouresServiceImpl implements SeckillCouresService{
 			//操作数据库
 			int length = studentCouresInfos.size();
 			couresInfoMapper.desAllAmount(length, couresInfoId);//更新数据库选课量
+			
 			count = studentCouresInfoMapper.addAllStudentCoures(studentCouresInfos);//插入所有选课信息
 			logger.info("导入成功");
 		}

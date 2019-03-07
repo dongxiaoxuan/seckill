@@ -69,7 +69,6 @@ public class SeckillCouresController {
 				for(Integer courseId : courseIds) {
 					//获取课程余量
 					amounts.add(i, Integer.parseInt(seckillCouresService.getAmountFromRedis(courseId)));
-					//44号学生不能选课，33，45可以
 					//获取学生选课链表
 					List<?> csList = seckillCouresService.getCourseStudentListFromRedis(courseId);
 					//判断redis对应选课链表中是否存在当前用户，结果写入model并返回给视图

@@ -1,20 +1,22 @@
-package com.geek.ms.pojo.vo;
+package com.geek.ms.pojo.po;
 
 import java.io.Serializable;
 
-public class Week implements Serializable{
+public class Festivals implements Serializable{
 
-	private static final long serialVersionUID = 5860455837465011134L;
+	private static final long serialVersionUID = 4489500223351968143L;
 
 	private int id;
 	private String name;
-	public Week() {
+	private int mark;
+	public Festivals() {
 		super();
 	}
-	public Week(int id, String name) {
+	public Festivals(int id, String name, int mark) {
 		super();
 		this.id = id;
 		this.name = name;
+		this.mark = mark;
 	}
 	public int getId() {
 		return id;
@@ -28,12 +30,18 @@ public class Week implements Serializable{
 	public void setName(String name) {
 		this.name = name;
 	}
+	public int getMark() {
+		return mark;
+	}
+	public void setMark(int mark) {
+		this.mark = mark;
+	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
 	@Override
 	public String toString() {
-		return "Week [id=" + id + ", name=" + name + "]";
+		return "Festivals [id=" + id + ", name=" + name + ", mark=" + mark + "]";
 	}
 	
 }

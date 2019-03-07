@@ -25,7 +25,7 @@
         <!-- 头部 -->
         <header>
             <!-- logo -->
-            <div class="am-fl tpl-header-logo">
+            <div class="am-fl tpl-header-logo"  style="position: fixed; left:0px;">
                 <a href="javascript:;"><img src="assets/img/logo.png" alt=""></a>
             </div>
             <!-- 右侧内容 -->
@@ -38,9 +38,9 @@
                 </div>
                 <!-- 搜索 -->
                 <div class="am-fl tpl-header-search">
-                    <form class="tpl-header-search-form" action="javascript:;">
-                        <button class="tpl-header-search-btn am-icon-search"></button>
-                        <input class="tpl-header-search-box" type="text" placeholder="搜索内容...">
+                    <form class="tpl-header-search-form" action="/search">
+                        <button type="submit" class="tpl-header-search-btn am-icon-search"></button>
+                        <input class="tpl-header-search-box" name="keyword" type="text" placeholder="搜索内容...">
                     </form>
                 </div>
                 <!-- 其它功能-->
@@ -51,14 +51,15 @@
                             <a href="javascript:;">欢迎你, <span th:text="${session.userSession.username}"></span> </a>
                         </li>
 
-                        <li class="am-text-sm">
+                        <li class="am-text-sm websocket">
+                        
                             <a href="javascript:;">
                                 <i class="am-icon-comments"></i> 聊天室
                             </a>
                         </li>
 
                         <!-- 退出 -->
-                        <li class="am-text-sm">
+                        <li class="am-text-sm" >
                             <a href="logout">
                                 <span class="am-icon-sign-out"></span> 退出
                             </a>
@@ -83,7 +84,7 @@
             </div>
         </div>
         <!-- 侧边导航栏 -->
-        <div class="left-sidebar">
+        <div class="left-sidebar" style="position: fixed; left:0px;">
             <!-- 用户信息 -->
             <div class="tpl-sidebar-user-panel">
                 <div class="tpl-user-panel-slide-toggleable">
@@ -105,7 +106,7 @@
 
             <div class="row-content am-cf">
                 <div class="row  am-cf">
-                    <div class="am-u-sm-12 am-u-md-6 am-u-lg-6">
+                    <div class="am-u-sm-12 am-u-md-6 am-u-lg-6 kuaijie1">
                         <div class="widget widget-primary am-cf">
                             <div class="widget-statistic-header">
                                 <i class="am-icon-cube"></i>&nbsp;快捷方式
@@ -121,7 +122,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="am-u-sm-12 am-u-md-6 am-u-lg-6">
+                    <div class="am-u-sm-12 am-u-md-6 am-u-lg-6 kuaijie2">
                         <div class="widget widget-purple am-cf">
                             <div class="widget-statistic-header">
                                 <i class="am-icon-cube"></i>&nbsp;快捷方式
@@ -131,13 +132,20 @@
                                     	选课管理
                                 </div>
                                 <div class="widget-statistic-description">
-                                    	通过选课完成您的个人课表&nbsp;<strong>(开放中)</strong>
+                                    	通过选课完成您的个人课表&nbsp;<strong>
+                                    	<th:block th:if="${isOpen}">
+                                    	(开放中)
+                                    	</th:block>
+                                    	<th:block th:if="${!isOpen}">
+                                    	(关闭)
+                                    	</th:block>
+                                    	</strong>
                                 </div>
                                 <span class="widget-statistic-icon am-icon-support"></span>
                             </div>
                         </div>
                     </div>
-                    <div class="am-u-sm-12 am-u-md-6 am-u-lg-6">
+                    <div class="am-u-sm-12 am-u-md-6 am-u-lg-6 kuaijie3">
                         <div class="widget widget-purple am-cf">
                             <div class="widget-statistic-header">
                                <i class="am-icon-cube"></i>&nbsp;快捷方式
@@ -153,7 +161,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="am-u-sm-12 am-u-md-6 am-u-lg-6">
+                    <div class="am-u-sm-12 am-u-md-6 am-u-lg-6 kuaijie4">
                         <div class="widget widget-primary am-cf">
                             <div class="widget-statistic-header">
                                 <i class="am-icon-cube"></i>&nbsp;快捷方式
@@ -298,7 +306,24 @@
     <script src="assets/js/amazeui.datatables.min.js"></script>
     <script src="assets/js/dataTables.responsive.min.js"></script>
     <script src="assets/js/app.js"></script>
-
+<script type="text/javascript">
+	$(".kuaijie1").on("click", function() {
+		window.location.href = '/userinfo';
+	});
+	$(".kuaijie2").on("click", function() {
+		window.location.href = '/select';
+	});
+	$(".kuaijie3").on("click", function() {
+		window.location.href = '/course';
+	});
+	$(".kuaijie4").on("click", function() {
+		window.location.href = '/score';
+	});
+	$(".websocket").on("click", function() {
+		var username = "[[${session.userSession.username}]]";
+		window.location.href = "http://localhost:8088/LoginController?username=" + username;
+	});
+</script>
 </body>
 
 </html>

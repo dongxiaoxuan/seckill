@@ -22,9 +22,10 @@ public class RoleController {
 	
 	@RequestMapping
 	public String getAllResources(@RequestParam(required = false, defaultValue = "0") int start, 
-			@RequestParam(required = false, defaultValue = "10") int length,
+			@RequestParam(required = false, defaultValue = "30") int length,
 			Model model) {
 		List<Role> roles = roleService.selectPageAll(start, length);
+		System.out.println(roles);
 		List<Role> allRoles = roleService.selectAll();
 		int page = (int) Math.ceil((double)allRoles.size() / length);
 		List<Resources> allResources = roleService.queryAll();
@@ -41,7 +42,6 @@ public class RoleController {
 		if(otherUrl.size() < 0) {
 			return null;
 		}
-		System.out.println(otherUrl.size());
 		return otherUrl;
 	}
 	

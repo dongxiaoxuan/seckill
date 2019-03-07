@@ -74,7 +74,9 @@ public class MyShiroRealm extends AuthorizingRealm{
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
 		
 		String username = (String)token.getPrincipal();
+		System.out.println(username);
 		User user = userService.selectByUsername(username);
+		System.out.println("user" + user);
 		if (user == null)
 			throw new UnknownAccountException();
 		if(0 == user.getEnable())

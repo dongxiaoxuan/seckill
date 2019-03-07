@@ -101,6 +101,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/logout", "logout");
         filterChainDefinitionMap.put("/css/**","anon");
         filterChainDefinitionMap.put("/js/**","anon");
+        filterChainDefinitionMap.put("/assets/**","anon");
         filterChainDefinitionMap.put("/img/**","anon");
         filterChainDefinitionMap.put("/font-awesome/**","anon");
         List<Resources> resourcesList = resourcesService.queryAll();

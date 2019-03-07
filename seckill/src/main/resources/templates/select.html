@@ -29,7 +29,7 @@
         <!-- 头部 -->
         <header>
             <!-- logo -->
-            <div class="am-fl tpl-header-logo">
+            <div class="am-fl tpl-header-logo" style="position: fixed; left:0px;">
                 <a href="javascript:;"><img src="assets/img/logo.png" alt=""></a>
             </div>
             <!-- 右侧内容 -->
@@ -42,9 +42,9 @@
                 </div>
                 <!-- 搜索 -->
                 <div class="am-fl tpl-header-search">
-                    <form class="tpl-header-search-form" action="javascript:;">
-                        <button class="tpl-header-search-btn am-icon-search"></button>
-                        <input class="tpl-header-search-box" type="text" placeholder="搜索内容...">
+                    <form class="tpl-header-search-form" action="/search">
+                        <button type="submit" class="tpl-header-search-btn am-icon-search"></button>
+                        <input class="tpl-header-search-box" name="keyword" type="text" placeholder="搜索内容...">
                     </form>
                 </div>
                 <!-- 其它功能-->
@@ -88,7 +88,7 @@
             </div>
         </div>
         <!-- 侧边导航栏 -->
-        <div class="left-sidebar">
+        <div class="left-sidebar" style="position: fixed; left:0px;">
             <!-- 用户信息 -->
             <div class="tpl-sidebar-user-panel">
                 <div class="tpl-user-panel-slide-toggleable">
@@ -141,9 +141,14 @@
                                 					</td>
                                 					
                                 					<td style="vertical-align:middle;" th:if="${#lists.isEmpty(c.getCiid()) }">
-                                						<label >
+                                					<th:block th:if="${amounts.get(i.index) > 0}">
+                                						<label>
 													      <input type="checkbox" class="cbx" th:value="${c.getId()}" required>
 													    </label>
+													</th:block>
+													<th:block th:if="${amounts.get(i.index) <= 0}">
+                                						<i style="color:#C80000;" class="am-icon-times"></i>&nbsp;已空
+													</th:block>
                                 					</td>
                                 					
                                 				</th:block>

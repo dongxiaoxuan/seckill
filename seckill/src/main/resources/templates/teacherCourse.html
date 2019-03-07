@@ -25,7 +25,7 @@
         <!-- 头部 -->
         <header>
             <!-- logo -->
-            <div class="am-fl tpl-header-logo">
+            <div class="am-fl tpl-header-logo"  style="position: fixed; left:0px;">
                 <a href="javascript:;"><img src="assets/img/logo.png" alt=""></a>
             </div>
             <!-- 右侧内容 -->
@@ -38,9 +38,9 @@
                 </div>
                 <!-- 搜索 -->
                 <div class="am-fl tpl-header-search">
-                    <form class="tpl-header-search-form" action="javascript:;">
-                        <button class="tpl-header-search-btn am-icon-search"></button>
-                        <input class="tpl-header-search-box" type="text" placeholder="搜索内容...">
+                    <form class="tpl-header-search-form" action="/search">
+                        <button type="submit" class="tpl-header-search-btn am-icon-search"></button>
+                        <input class="tpl-header-search-box" name="keyword" type="text" placeholder="搜索内容...">
                     </form>
                 </div>
                 <!-- 其它功能-->
@@ -84,7 +84,7 @@
             </div>
         </div>
         <!-- 侧边导航栏 -->
-        <div class="left-sidebar">
+        <div class="left-sidebar" style="position: fixed; left:0px;">
             <!-- 用户信息 -->
             <div class="tpl-sidebar-user-panel">
                 <div class="tpl-user-panel-slide-toggleable">
@@ -104,6 +104,7 @@
         <div class="tpl-content-wrapper">
 		<div  id="tpl-echarts"></div>
             <div class="row-content am-cf">
+            <th:block th:if="${!isOpen}">
             <shiro:hasRole name="teacher">
             <th:block th:each="sitt : ${sitts}">
             	<div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
@@ -136,6 +137,19 @@
             	</div>
             	</th:block>
             </shiro:hasRole>
+            </th:block>
+            <th:block th:if="${isOpen}">
+            
+            <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+                <div class="widget am-cf">
+                    <div class="widget-head am-cf">
+                        <div class="widget-title am-fl">选课信息</div>
+                    </div>
+                     <span style="color:red;">目前正在选课……请在选课结束后查看选课结果</span>
+                </div>
+	        </div>
+           	 
+            </th:block>
             </div>
         </div>
     </div>

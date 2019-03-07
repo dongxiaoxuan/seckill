@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 import com.geek.ms.mapper.CouresInfoMapper;
 import com.geek.ms.mapper.CourseMapper;
 import com.geek.ms.mapper.StudentCourseInfoMapper;
+import com.geek.ms.pojo.po.Festivals;
+import com.geek.ms.pojo.po.Week;
 import com.geek.ms.pojo.vo.CourseTable;
-import com.geek.ms.pojo.vo.Festivals;
 import com.geek.ms.pojo.vo.StudentCourseInfo;
 import com.geek.ms.pojo.vo.StudentInfoToTeacher;
-import com.geek.ms.pojo.vo.Week;
 import com.geek.ms.service.CourseService;
 
 @Service
