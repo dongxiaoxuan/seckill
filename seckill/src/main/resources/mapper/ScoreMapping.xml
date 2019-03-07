@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geek.ms.mapper.ScoreMapper">
+
+	<select id="queryStudentYears" resultType="com.geek.ms.pojo.po.Years">
+		SELECT
+			y.* 
+		FROM
+			years y
+			LEFT JOIN classes cls ON y.id = cls.years_id
+			LEFT JOIN USER u ON cls.id = u.classes_id 
+		WHERE
+			u.id = #{id}
+	</select>
+	
+	<select id="loadAllYears" resultType="com.geek.ms.pojo.po.Years">
+		select * from years
+	</select>
+	
+	<select id="queryScore" resultType="com.geek.ms.pojo.vo.ScoreByYears">
+SELECT
+	c.years_id yearsId,
+	c.NAME,
+	s.score 
+FROM
+	score s
+	LEFT JOIN course_info ci ON s.course_info_id = ci.id
+	LEFT JOIN course c ON ci.course_id = c.id 
+WHERE
+	s.user_id = #{id} 
+	AND c.ismust = 1 UNION
+SELECT
+	sci.years_id yearsId,
+	c.NAME,
+	s.score 
+FROM
+	score s
+	INNER JOIN student_course_info sci ON s.course_info_id = sci.course_info_id 
+	AND s.user_id = sci.user_id
+	INNER JOIN course_info ci ON sci.course_info_id = ci.id
+	INNER JOIN course c ON ci.course_id = c.id
+	where sci.user_id = #{id}
+	</select>
+
+	<select id="queryCourseClassStudents" resultType="com.geek.ms.pojo.vo.CourseClassStudent">
+		SELECT
+			u.classes_id classesId,
+			ui.user_id userId,
+			ui.number,
+			ui.realName,
+			c.NAME 
+		FROM
+			user_info ui
+			LEFT JOIN college c ON ui.college_id = c.id
+			LEFT JOIN USER u ON ui.user_id = u.id 
+		WHERE
+			ui.user_id IN (
+			SELECT
+				id 
+			FROM
+			USER 
+			WHERE
+				classes_id IN (
+				SELECT
+					id 
+				FROM
+					classes 
+				WHERE
+					years_id = #{yearsId} 
+					AND profession_id IN (
+					SELECT
+						profession_id 
+					FROM
+						course 
+					WHERE
+						id = #{courseId} 
+					) 
+				) 
+			) 
+		ORDER BY
+			classesId
+	</select>
+	
+	<select id="queryAllMustCourseByUserId" resultType="com.geek.ms.pojo.po.Course">
+		SELECT
+			c.id,c.name,c.years_id yearsId
+		FROM
+			course_info ci
+			INNER JOIN course c ON ci.course_id = c.id 
+		WHERE
+			user_id = #{id} 
+			AND c.ismust = 1
+	</select>
+	
+	<select id="haveScoreByCourse" resultType="java.lang.Integer">
+		SELECT
+			count( s.id ) 
+		FROM
+			score s
+			INNER JOIN course_info ci ON s.course_info_id = ci.id 
+		WHERE
+			ci.course_id = #{courseId}
+	</select>
+
+	<insert id="insertScore">
+		INSERT into score(course_info_id,user_id,score) values(#{courseId}, #{userId}, #{score})
+	</insert>
+
+</mapper>
