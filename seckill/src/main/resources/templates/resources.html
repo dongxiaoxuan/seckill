@@ -146,10 +146,13 @@
 	</tbody>
 </table>
 </div>
+<ul class="am-pagination tpl-pagination" style="text-align:center">
+	<li th:each="i : ${#numbers.sequence(1, page)}"><a href="#" th:text="${i}" th:id="page+${i}" class="pagebutt">1</a></li>
+</ul>
 </div>
 </div>
 <div>
-	<button th:each="i : ${#numbers.sequence(1, page)}" th:text="${i}" th:id="page+${i}" class="pagebutt">1</button>
+
 </div>
 <!-- 分页换页，提交起始页码和每页长度 -->
 <form id="hiddenForm1" th:action="@{/resources}" method="post">

@@ -13,7 +13,7 @@ import com.geek.ms.mapper.RoleMapper;
 import com.geek.ms.pojo.vo.Resources;
 import com.geek.ms.pojo.vo.Role;
 import com.geek.ms.service.RoleService;
-import com.geek.ms.shiro.MyShiroRealm;
+//import com.geek.ms.shiro.MyShiroRealm;
 
 @Service
 public class RoleServiceImpl implements RoleService {
@@ -24,8 +24,9 @@ public class RoleServiceImpl implements RoleService {
 	@Autowired
 	private ResourcesMapper resourcesMapper;
 	
-	@Autowired 
-	private MyShiroRealm myShiroRealm;
+	/*
+	 * @Autowired private MyShiroRealm myShiroRealm;
+	 */
 
 	@Override
 	public List<Role> selectPageAll(int start, int length) {
@@ -54,7 +55,7 @@ public class RoleServiceImpl implements RoleService {
 	public void deleteRole(int id) { 
   
 		//1.删除角色 2.删除该角色资源
-  
+		
   }
 
 	@Override

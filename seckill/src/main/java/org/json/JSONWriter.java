@@ -390,7 +390,8 @@ public class JSONWriter {
      * @return this
      * @throws JSONException If the number is not finite.
      */
-    public JSONWriter value(double d) throws JSONException {
+    @SuppressWarnings("deprecation")
+	public JSONWriter value(double d) throws JSONException {
         return this.value(new Double(d));
     }
 
