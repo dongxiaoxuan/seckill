@@ -2,7 +2,7 @@ package com.geek.ms.pojo.vo;
 
 import java.io.Serializable;
 
-public class CouresInfo implements Serializable{
+public class CourseInfo implements Serializable{
 
 	private static final long serialVersionUID = 4858337369886484440L;
 	
@@ -10,10 +10,10 @@ public class CouresInfo implements Serializable{
 	private int couresId;
 	private int userId;
 	private int amount;
-	public CouresInfo() {
+	public CourseInfo() {
 		super();
 	}
-	public CouresInfo(int id, int couresId, int userId, int amount) {
+	public CourseInfo(int id, int couresId, int userId, int amount) {
 		super();
 		this.id = id;
 		this.couresId = couresId;
@@ -46,7 +46,7 @@ public class CouresInfo implements Serializable{
 	}
 	@Override
 	public String toString() {
-		return "CouresInfo [id=" + id + ", couresId=" + couresId + ", userId=" + userId + ", amount=" + amount
+		return "CourseInfo [id=" + id + ", couresId=" + couresId + ", userId=" + userId + ", amount=" + amount
 				+ "]";
 	}
 	

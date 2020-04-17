@@ -35,6 +35,25 @@
 			#{length}
 	</select>
 	
+	<select id="loadUpdateCourse" resultType="com.geek.ms.pojo.vo.CourseModel">
+		SELECT
+			ci.id,
+			c.NAME,
+			ui.user_id,
+			ui.realName,
+			cg.name college ,
+			sci.course_info_id ciid 
+		FROM
+			course_info ci
+			LEFT JOIN course c ON ci.course_id = c.id
+			LEFT JOIN user_info ui ON ci.user_id = ui.user_id
+			LEFT JOIN ( SELECT course_info_id FROM student_course_info) sci ON ci.id = sci.course_info_id 
+			left join college cg on ui.college_id = cg.id
+		WHERE
+			c.ismust =0
+			order by ci.id
+	</select>
+	
 	<select id="getCourseCount" resultType="java.lang.Integer">
 		SELECT
 			count(c.id) count
@@ -84,5 +103,37 @@
 	<delete id="dropCourseById">
 		delete from student_course_info where user_id = #{userId} and course_info_id = #{ciid}
 	</delete>
+	
+	<delete id="deleteCourse">
+		delete from course where id in (select course_id from course_info where id = #{id})
+	</delete>
+	
+	<update id="updateCourse">
+		UPDATE course SET name = #{name} WHERE id in (select course_id from course_info where id = #{id})
+	</update>
+	
+	<select id="isTeacher" resultType="java.lang.Integer">
+		select count(id) from user_role where user_id in (select user_id from user_info where realName = #{teacherName}) and role_id = 2
+	</select>
+	
+	<update id="updateTeahcer">
+		update course_info set user_id = (select user_id from user_info where realName = #{name}) where id = #{id}
+	</update>
+	
+	<insert id="addCourse0" parameterType="com.geek.ms.pojo.po.Course">
+		insert into course (name, ismust) values (#{name}, #{ismust})
+	</insert>
+	
+	<insert id="addCourse" parameterType="com.geek.ms.pojo.po.Course">
+		insert into course (name, ismust, years_id, profession_id) values (#{name}, #{ismust}, #{yearsId}, #{professionId})
+	</insert>
+	
+	<insert id="addCourseInfo" parameterType="java.lang.String">
+		insert into course_info (course_id, user_id) values ((select id from course where name = #{courseName}), (select user_id from user_info where realName = #{teacherName}))
+	</insert>
+	
+	<select id="selectProfession" resultType="com.geek.ms.pojo.po.Profession">
+		select id, name from profession
+	</select>
 
 </mapper>

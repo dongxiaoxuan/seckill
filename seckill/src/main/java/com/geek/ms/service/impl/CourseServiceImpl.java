@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.geek.ms.mapper.CouresInfoMapper;
 import com.geek.ms.mapper.CourseMapper;
 import com.geek.ms.mapper.StudentCourseInfoMapper;
+import com.geek.ms.pojo.po.Course;
 import com.geek.ms.pojo.po.Festivals;
 import com.geek.ms.pojo.po.Week;
 import com.geek.ms.pojo.vo.CourseTable;
@@ -50,6 +51,11 @@ public class CourseServiceImpl implements CourseService{
 	@Override
 	public List<StudentCourseInfo> queryAllSciByTime(String start, int id) {
 		return studentCourseInfoMapper.queryAllSciByTime(start,id);
+	}
+
+	@Override
+	public List<Course> getAllMustCourse() {
+		return courseInfoMapper.getAllMustCourse();
 	}
 
 }

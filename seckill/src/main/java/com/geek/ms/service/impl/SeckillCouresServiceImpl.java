@@ -20,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.geek.ms.mapper.CouresInfoMapper;
 import com.geek.ms.mapper.ScoreMapper;
 import com.geek.ms.mapper.StudentCourseInfoMapper;
+import com.geek.ms.pojo.po.Course;
+import com.geek.ms.pojo.po.Profession;
 import com.geek.ms.pojo.po.Years;
 import com.geek.ms.pojo.vo.CourseModel;
 import com.geek.ms.pojo.vo.StudentCourseInfo;
@@ -195,4 +197,49 @@ public class SeckillCouresServiceImpl implements SeckillCouresService{
 		return couresInfoMapper.clearAllAmount();
 	}
 
+	@Override
+	public List<CourseModel> loadUpdateCourse(Integer start, Integer length) {
+		return studentCouresInfoMapper.loadUpdateCourse(start, length);
+	}
+
+	@Override
+	public int deleteCourse(int id) {
+		return studentCouresInfoMapper.deleteCourse(id);
+	}
+
+	@Override
+	public int updateCourse(int id, String name) {
+		return studentCouresInfoMapper.updateCourse(id, name);
+	}
+
+	@Override
+	public int isTeacher(String teacherName) {
+		return studentCouresInfoMapper.isTeacher(teacherName);
+	}
+
+	@Override
+	public int updateTeahcer(String name, int id) {
+		return studentCouresInfoMapper.updateTeahcer(name, id);
+	}
+
+	@Override
+	public int addCourse(Course course) {
+		return studentCouresInfoMapper.addCourse(course);
+	}
+
+	@Override
+	public int addCourseInfo(String courseName, String teacherName) {
+		return studentCouresInfoMapper.addCourseInfo(courseName, teacherName);
+	}
+
+	@Override
+	public List<Profession> selectProfession() {
+		return studentCouresInfoMapper.selectProfession();
+	}
+
+	@Override
+	public int addCourse0(Course course) {
+		return studentCouresInfoMapper.addCourse0(course);
+	}
+	
 }

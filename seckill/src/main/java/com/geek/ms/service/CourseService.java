@@ -2,6 +2,7 @@ package com.geek.ms.service;
 
 import java.util.List;
 
+import com.geek.ms.pojo.po.Course;
 import com.geek.ms.pojo.po.Festivals;
 import com.geek.ms.pojo.po.Week;
 import com.geek.ms.pojo.vo.CourseTable;
@@ -19,4 +20,6 @@ public interface CourseService {
 	List<StudentInfoToTeacher> queryStudentNumberToTeacher(int id);
 	
 	List<StudentCourseInfo> queryAllSciByTime(String start,int id);
+	
+	List<Course> getAllMustCourse();
 }

@@ -2,6 +2,9 @@ package com.geek.ms.pojo.po;
 
 import java.io.Serializable;
 
+import com.geek.ms.pojo.vo.CourseInfo;
+import com.geek.ms.pojo.vo.UserInfo;
+
 public class Course implements Serializable{
 
 	private static final long serialVersionUID = 5417712725738331446L;
@@ -9,8 +12,10 @@ public class Course implements Serializable{
 	private int id;
 	private String name;
 	private int ismust;
-	private int yearsId;
-	private int professionId;
+	private Integer yearsId;
+	private Integer professionId;
+	private UserInfo userInfo;
+	private CourseInfo courseInfo;
 	public Course() {
 		super();
 	}
@@ -43,20 +48,32 @@ public class Course implements Serializable{
 	public int getYearsId() {
 		return yearsId;
 	}
-	public void setYearsId(int yearsId) {
+	public void setYearsId(Integer yearsId) {
 		this.yearsId = yearsId;
 	}
 	public int getProfessionId() {
 		return professionId;
 	}
-	public void setProfessionId(int professionId) {
+	public void setProfessionId(Integer professionId) {
 		this.professionId = professionId;
+	}
+	public UserInfo getUserInfo() {
+		return userInfo;
+	}
+	public void setUserInfo(UserInfo userInfo) {
+		this.userInfo = userInfo;
+	}
+	
+	public CourseInfo getCourseInfo() {
+		return courseInfo;
+	}
+	public void setCourseInfo(CourseInfo courseInfo) {
+		this.courseInfo = courseInfo;
 	}
 	@Override
 	public String toString() {
 		return "Course [id=" + id + ", name=" + name + ", ismust=" + ismust + ", yearsId=" + yearsId + ", professionId="
-				+ professionId + "]";
+				+ professionId + ", userInfo=" + userInfo + ", courseInfo=" + courseInfo + "]";
 	}
-	
 	
 }

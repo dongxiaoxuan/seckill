@@ -48,7 +48,7 @@ public class LoginController {
         UsernamePasswordToken token=new UsernamePasswordToken(user.getUsername(),user.getPassword());
         try {
         	subject.login(token);
-        	speechService.speech(user.getUsername() + ",欢迎登录极客教务系统，我叫小G，是您可爱的小助手。");
+        	speechService.speech(user.getUsername() + ",欢迎登录极客教务系统");
         	//user.getUsername() + "欢迎登录极客教务系统，我叫小G，是您可爱的小助手，我将竭诚为您服务。"
             return "redirect:index";
         }catch (LockedAccountException lae) {

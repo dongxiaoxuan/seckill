@@ -2,6 +2,8 @@ package com.geek.ms.service;
 
 import java.util.List;
 
+import com.geek.ms.pojo.po.Course;
+import com.geek.ms.pojo.po.Profession;
 import com.geek.ms.pojo.vo.CourseModel;
 
 public interface SeckillCouresService {
@@ -11,6 +13,8 @@ public interface SeckillCouresService {
 	int seckillCoures(int couresInfoId, int studentId);
 	
 	List<CourseModel> loadCourse(Integer start, Integer length, Integer id);
+	
+	List<CourseModel> loadUpdateCourse(Integer start, Integer length);
 	
 	Integer getCourseCount();
 	
@@ -31,4 +35,20 @@ public interface SeckillCouresService {
 	List<Integer> loadAllCourseId();
 	
 	int clearAllAmount();
+	
+	int deleteCourse(int id);
+	
+	int updateCourse(int id, String name);
+	
+	int isTeacher(String teacherName);
+	
+	int updateTeahcer(String name, int id);
+	
+	int addCourse0(Course course);
+	
+	int addCourse(Course course);
+	
+	int addCourseInfo(String courseName, String teacherName);
+	
+	List<Profession> selectProfession();
 }
