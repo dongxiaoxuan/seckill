@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>geek教务课程管理</title>
+    <meta name="description" content="这是一个 index 页面">
+    <meta name="keywords" content="index">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <link rel="icon" type="image/png" href="assets/i/favicon.png">
+    <link rel="apple-touch-icon-precomposed" href="assets/i/app-icon72x72@2x.png">
+    <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+    <script src="assets/js/echarts.min.js"></script>
+    <link rel="stylesheet" href="assets/css/amazeui.min.css" />
+    <link rel="stylesheet" href="assets/css/amazeui.datatables.min.css" />
+    <link rel="stylesheet" href="assets/css/app.css">
+    <script src="assets/js/jquery.min.js"></script>
+</head>
+
+<body data-type="index">
+    <script src="assets/js/theme.js"></script>
+    <div class="am-g tpl-g">
+        <!-- 头部 -->
+        <header>
+            <!-- logo -->
+            <div class="am-fl tpl-header-logo"  style="position: fixed; left:0px;">
+                <a href="javascript:;"><img src="assets/img/logo.png" alt=""></a>
+            </div>
+            <!-- 右侧内容 -->
+            <div class="tpl-header-fluid">
+                <!-- 侧边切换 -->
+                <div class="am-fl tpl-header-switch-button am-icon-list">
+                    <span>
+
+                </span>
+                </div>
+                <!-- 搜索 -->
+                <div class="am-fl tpl-header-search">
+                    <form class="tpl-header-search-form" action="/search">
+                        <button type="submit" class="tpl-header-search-btn am-icon-search"></button>
+                        <input class="tpl-header-search-box" name="keyword" type="text" placeholder="搜索内容...">
+                    </form>
+                </div>
+                <!-- 其它功能-->
+                <div class="am-fr tpl-header-navbar">
+                    <ul>
+                        <!-- 欢迎语 -->
+                        <li class="am-text-sm tpl-header-navbar-welcome">
+                            <a href="javascript:;">欢迎你, <span th:text="${session.userSession.username}"></span> </a>
+                        </li>
+
+                        <!-- 新提示 -->
+                        <li class="am-text-sm websocket">
+                            <a href="javascript:;">
+                                <i class="am-icon-comments"></i> 聊天室
+                            </a>
+                        </li>
+
+                        <!-- 退出 -->
+                        <li class="am-text-sm">
+                            <a href="logout">
+                                <span class="am-icon-sign-out"></span> 退出
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </header>
+        <!-- 风格切换 -->
+        <div class="tpl-skiner">
+            <div class="tpl-skiner-toggle am-icon-cog">
+            </div>
+            <div class="tpl-skiner-content">
+                <div class="tpl-skiner-content-title">
+                    选择主题
+                </div>
+                <div class="tpl-skiner-content-bar">
+                    <span class="skiner-color skiner-white" data-color="theme-white"></span>
+                    <span class="skiner-color skiner-black" data-color="theme-black"></span>
+                </div>
+            </div>
+        </div>
+        <!-- 侧边导航栏 -->
+        <div class="left-sidebar" style="position: fixed; left:0px;">
+            <!-- 用户信息 -->
+            <div class="tpl-sidebar-user-panel">
+                <div class="tpl-user-panel-slide-toggleable">
+                    <div class="tpl-user-panel-profile-picture">
+                        <img src="assets/img/user04.png" alt="">
+                    </div>
+                    <span class="user-panel-logged-in-text">
+              <i class="am-icon-circle-o am-text-success tpl-user-panel-status-icon"></i>
+              <span th:text="${session.userSession.username}"></span>
+          </span>
+                </div>
+            </div>
+			<div th:include="common/menu :: menu"></div>
+        </div>
+
+
+        <!-- 内容区域 -->
+        <div class="tpl-content-wrapper">
+		<div  id="tpl-echarts"></div>
+            <div class="row-content am-cf">
+            <form id="infoForm" action="#" class="am-form tpl-form-line-form">
+				<div class="row">
+                    <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+                        <div class="widget am-cf">
+                            <div class="widget-head am-cf">
+                                <div class="widget-title am-fl">课程信息</div>
+                            </div>
+                            <div class="widget-body am-fr">
+                            	<button type="button" class="am-btn am-btn-success am-btn-xs" id="add" >添加课程</button>
+                            	<div class="am-form-group" style="float: right;">
+                                       <label for="user-phone" class="am-u-sm-4 am-form-label">课程类型</label>
+                                       <div class="am-u-sm-8">
+                                           <select id="courseTypeSel" data-am-selected="{searchBox: 1}" style="display: none;">
+											  <option value="0">选修课</option>
+											  <option value="1">必修课</option>
+										</select>
+                                     </div>
+                                 </div>
+                            </div>
+                            <div class="widget-body am-fr" id="addDiv" style="display:none;">
+                            	<div class="am-form-group">
+							      <label for="doc-ipt-email-1">课程名称</label>
+							      <input type="email" class="" id="addCourseName" placeholder="输入课程名称">
+							    </div>
+							    <div class="am-form-group">
+							      <label for="doc-ipt-email-1">老师名称</label>
+							      <input type="email" class="" id="addTeacherName" placeholder="输入老师名称">
+							    </div>
+							    <div class="am-form-group">
+							      <label for="doc-select-1">选修/必修</label>
+							      <select id="doc-select-1">
+							        <option value="0">选修课</option>
+							        <option value="1">必修课</option>
+							      </select>
+							    </div>
+							    <div class="am-form-group" id="collegeDiv" style="display: none;">
+							      <label for="pro">选择专业</label>
+							      <select id="pro">
+							      	<th:block th:each="p : ${pro}">
+							      		<option th:value="${p.getId()}" th:text="${p.getName()}"></option>
+							      	</th:block>
+							      </select>
+							    </div>
+							    <div class="am-form-group"  id="yearsDiv" style="display: none;">
+							      <label for="years">选择学期</label>
+							      <select id="years">
+							        <option value="1">一年级上</option>
+							        <option value="2">一年级下</option>
+							        <option value="3">二年级上</option>
+							        <option value="4">二年级下</option>
+							        <option value="5">三年级上</option>
+							        <option value="6">三年级下</option>
+							        <option value="7">四年级上</option>
+							        <option value="8">四年级下</option>
+							      </select>
+							    </div>
+							    <button type="button" class="am-btn am-btn-primary am-btn-xs" id="submit">提交</button>
+                            </div>
+                            <div class="widget-body am-fr">
+                            
+	                            <table class="am-table am-table-compact tpl-table-black xuanCourse" style="text-align: center;">
+	                        		<tr>
+	                               		<th style="border-top: 0;text-align: center;">课程名称</th>
+	                               		<th style="border-top: 0;text-align: center;">授课教师</th>
+	                               		<th style="border-top: 0;text-align: center;">执行操作</th>
+	                               	</tr>
+	                               	<tr th:each="c : ${cms2}">
+	                               		<td th:text="${c.getId()}" style="display:none;"></td>
+	                               		<td th:text="${c.getName()}"></td>
+	                               		<td th:text="${c.getRealName()}"></td>
+	                               		<td><button type="button" class="am-btn am-btn-primary am-btn-xs update">修改</button>
+	                               			<button type="button" class="am-btn am-btn-danger am-btn-xs delete">删除</button>
+	                               			<button style="display: none;" type="button" class="am-btn am-btn-secondary am-btn-xs preserve">保存</button>
+											<button style="display: none;" type="button" class="am-btn am-btn-warning am-btn-xs cancel">取消</button>
+	                               		</td>
+	                               	</tr>
+	                        	</table>
+                                <table class="am-table am-table-compact tpl-table-black  mustCourse" style="text-align: center;display:none;">
+	                        		<tr>
+	                               		<th style="border-top: 0;text-align: center;" >课程名称</th>
+	                               		<th style="border-top: 0;text-align: center;">授课教师</th>
+	                               		<th style="border-top: 0;text-align: center;">所属年级</th>
+	                               		<th style="border-top: 0;text-align: center;">执行操作</th>
+	                               	</tr>
+	                               	<tr th:each="m : ${mustCourses}">
+	                               		<td th:text="${m.getCourse().getId()}" style="display:none;"></td>
+	                               		<td th:text="${m.getId()}" style="display:none;"></td>
+	                               		<td >
+	                               			<span class="proSpan" th:text="${m.getCourse().getName()}"></span>
+	                               			<input class="proInput courseName" th:value="${m.getCourse().getName()}" style="display: none;" />
+	                               		</td>
+	                               		<td >
+	                               			<span class="proSpan" th:text="${m.getUserInfo().getRealName()}"></span>
+	                               			<div class="am-form-group proInput" style="display: none;">
+										      <select id="doc-select-1" class="teacherId">
+										      	<th:block th:each="t : ${teacheres}">
+										        <option th:value="${t.getId()}" th:text="${t.getRealName()}"></option>
+										        </th:block>
+										      </select>
+										    </div>
+	                               		</td>
+	                               		<td>
+	                               			<span th:if="${m.getCourse().getYearsId() == 1}">一年级上</span>
+	                               			<span th:if="${m.getCourse().getYearsId() == 2}">一年级下</span>
+	                               			<span th:if="${m.getCourse().getYearsId() == 3}">二年级上</span>
+	                               			<span th:if="${m.getCourse().getYearsId() == 4}">二年级下</span>
+	                               			<span th:if="${m.getCourse().getYearsId() == 5}">三年级上</span>
+	                               			<span th:if="${m.getCourse().getYearsId() == 6}">三年级下</span>
+	                               			<span th:if="${m.getCourse().getYearsId() == 7}">四年级上</span>
+	                               			<span th:if="${m.getCourse().getYearsId() == 8}">四年级下</span>
+	                               		</td>
+	                               		<td><button type="button" class="am-btn am-btn-primary am-btn-xs update2">修改</button>
+	                               			<button type="button" class="am-btn am-btn-danger am-btn-xs delete2">删除</button>
+	                               			<button style="display: none;" type="button" class="am-btn am-btn-secondary am-btn-xs preserve2">保存</button>
+											<button style="display: none;" type="button" class="am-btn am-btn-warning am-btn-xs cancel2">取消</button>
+	                               		</td>
+	                               	</tr>
+	                        	</table>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="assets/js/amazeui.min.js"></script>
+    <script src="assets/js/amazeui.datatables.min.js"></script>
+    <script src="assets/js/dataTables.responsive.min.js"></script>
+    <script src="assets/js/app.js"></script>
+    <div th:fragment="scripts(scripts)">
+   	<script th:inline="javascript">
+   		$(function() {
+   			
+   			$("#doc-select-1").change(function() {
+   				if($("#doc-select-1").val() == "1") {
+   	   				$("#collegeDiv").show();
+   	   				$("#yearsDiv").show();
+   	   			
+   	   			}else {
+   	   				$("#collegeDiv").hide();
+   	   				$("#yearsDiv").hide();
+   	   			}
+   			});
+   			
+   			$("#add").on("click",function() {
+   				$("#addDiv").toggle();
+   				if($(this).text() == "添加课程") {
+   					$(this).text("收起");
+   				}else {
+   					$(this).text("添加课程");
+   				}
+   				
+   			});
+   			$(".update").on("click",function() {
+   				//暂存两个按钮，用于后面变回来
+   				//var but = $(this).parent().html();
+   				var courseName = $(this).parent().siblings().eq(1).text();
+   				var teacherName = $(this).parent().siblings().eq(2).text();
+   				//遍历每一个td
+   				$(this).parent().siblings().each(function(){
+   					//保存每个td的值
+   					var v = $(this).text();
+   					//把每个td的值变成输入框
+   					$(this).html("<input value='" + v + "'>");
+   				});
+   				
+   				$(this).parent().find(".update").hide();
+   				$(this).parent().find(".delete").hide();
+   				$(this).parent().find(".preserve").show();
+   				$(this).parent().find(".cancel").show();
+  				//点击取消按钮时
+				$(".cancel").on("click",function() {
+					$(this).parent().siblings().eq(1).text(courseName);
+					$(this).parent().siblings().eq(2).text(teacherName);
+					$(this).parent().find(".update").show();
+					$(this).parent().find(".delete").show();
+					$(this).parent().find(".preserve").hide();
+					$(this).parent().find(".cancel").hide();
+				});
+  				//点击保存按钮时
+  				$(".preserve").on("click",function() {
+  					var a = new Array();
+  					$(this).parent().siblings().each(function(i){
+  						a[i] = $(this).children().val();
+  					});
+  					//var as = JSON.stringify(a);
+  					$.ajax({
+  	   		    		url : 'updateCourse/update',
+  	   		    		type : 'post',
+  	   		    		data : {a : a},
+  	   		    		//processData: false,   // jQuery不要去处理发送的数据
+  	   		   			//contentType: false,   // jQuery不要去设置Content-Type请求头
+  	   		    		success : function(result) {
+  	   		    			if(result == "success") {
+	  	   		    			alert("修改成功");
+	  	   		    			window.location.href="updateCourse";
+  	   		    			}else {
+  	   		    				alert(result);
+  	   		    			}
+  	   		    			
+  	   		    		},
+  	   		    		error : function(result) {
+  	   		    			alert("修改失败");
+  	   		    		}
+  	   				});
+  					
+  	   			});
+   			});
+   			$(".delete").on("click",function() {
+   				var id = $(this).parent().siblings().first().text();
+   				$.ajax({
+   		    		url : 'updateCourse/delete',
+   		    		type : 'post',
+   		    		data : {id : id},
+   		    		success : function(result) {
+   		    			alert("删除成功");
+   		    			window.location.href="updateCourse";
+   		    		},
+   		    		error : function(result) {
+   		    			alert("删除失败");
+   		    		}
+   				});
+   			});
+   			$("#submit").on("click", function() {
+   				var courseName = $("#addCourseName").val();
+   				var teacherName = $("#addTeacherName").val();
+   				if($("#doc-select-1").val() == 0) {
+   					$.ajax({
+  	   		    		url : 'updateCourse/add0',
+  	   		    		type : 'post',
+  	   		    		data : {
+  	   		    			name : courseName,
+  	   		    			ismust : parseInt("0"),
+  	   		    			teacherName : teacherName
+  	   		    		},
+  	   		    		//processData: false,   // jQuery不要去处理发送的数据
+  	   		   			//contentType: false,   // jQuery不要去设置Content-Type请求头
+  	   		    		success : function(result) {
+  	   		    			if(result == "success") {
+	  	   		    			alert("添加成功");
+	  	   		    			window.location.href="updateCourse";
+  	   		    			}else {
+  	   		    				alert(result);
+  	   		    			}
+  	   		    			
+  	   		    		},
+  	   		    		error : function(result) {
+  	   		    			alert("添加失败");
+  	   		    		}
+  	   				});
+   				}else if($("#doc-select-1").val() == 1){
+   					var professionId = $("#pro").val();
+   					var yearsId = $("#years").val();
+   					$.ajax({
+  	   		    		url : 'updateCourse/add1',
+  	   		    		type : 'post',
+  	   		    		data : {
+  	   		    			name : courseName,
+  	   		    			teacherName : teacherName,
+  	   		    			ismust : parseInt("1"),
+  	   		    			yearsId : parseInt(yearsId),
+  	   		    			professionId : parseInt(professionId)
+  	   		    		},
+  	   		    		//processData: false,   // jQuery不要去处理发送的数据
+  	   		   			//contentType: false,   // jQuery不要去设置Content-Type请求头
+  	   		    		success : function(result) {
+  	   		    			if(result == "success") {
+	  	   		    			alert("添加成功");
+	  	   		    			window.location.href="updateCourse";
+  	   		    			}else {
+  	   		    				alert(result);
+  	   		    			}
+  	   		    			
+  	   		    		},
+  	   		    		error : function(result) {
+  	   		    			alert("添加失败");
+  	   		    		}
+  	   				});
+   				}else {
+   					alert("请选择选修 / 必修");
+   				}
+   			});
+   			
+   			$("#courseTypeSel").change(function() {
+   				var ismust = $(this).val();
+   				if(ismust == "0") {
+   					$(".xuanCourse").show();
+   					$(".mustCourse").hide()
+   				}else {
+   					$(".xuanCourse").hide();
+   					$(".mustCourse").show()
+   				}
+   			});
+   			$(".update2").click(function() {
+   				$(this).hide();
+   				$(this).next().hide();
+   				
+   				$(this).next().next().show();
+   				$(this).next().next().next().show();
+   				
+   				$(this).parent().parent().find(".proSpan").hide();
+   				$(this).parent().parent().find(".proInput").show();
+   			});
+   			$(".cancel2").click(function() {
+   				$(this).hide();
+   				$(this).prev().hide();
+   				
+   				$(this).prev().prev().show();
+   				$(this).prev().prev().prev().show();
+   				
+   				$(this).parent().parent().find(".proSpan").show();
+   				$(this).parent().parent().find(".proInput").hide();
+   			});
+   			$(".delete2").on("click",function() {
+   				var id = $(this).parent().siblings().first().text();
+   				$.ajax({
+   		    		url : 'updateCourse/delete',
+   		    		type : 'post',
+   		    		data : {id : id},
+   		    		success : function(result) {
+   		    			alert("删除成功");
+   		    			window.location.href="updateCourse";
+   		    		},
+   		    		error : function(result) {
+   		    			alert("删除失败");
+   		    		}
+   				});
+   			});
+   			$(".preserve2").click(function() {
+   				var id = $(this).parent().siblings().first().next().text();
+   				var couresId = $(this).parent().siblings().first().text();
+   				var courseName = $(this).parent().parent().find(".courseName").val();
+   				var teacherId = $(this).parent().parent().find(".teacherId").val();
+   				$.ajax({
+	   		    		url : 'updateCourse/update2',
+	   		    		type : 'post',
+	   		    		data : {
+	   		    			id : id,
+	   		    			couresId : couresId,
+	   		    			userId : teacherId,
+	   		    			name : courseName
+	   		    		},
+	   		    		success : function(result) {
+	   		    			if(result == "success") {
+	  	   		    			alert("修改成功");
+	  	   		    			window.location.href="updateCourse";
+	   		    			}else {
+	   		    				alert("修改失败");
+	   		    			}
+	   		    			
+	   		    		},
+	   		    		error : function(result) {
+	   		    			alert("修改失败");
+	   		    		}
+	   				});
+   			});
+   			$(".websocket").on("click", function() {
+   				var username = "[[${session.userSession.username}]]";
+   				window.location.href = "http://localhost:8087/LoginController?username=" + username;
+   			});
+   		});
+   	</script>
+   	</div>
+</body>
+
+</html>

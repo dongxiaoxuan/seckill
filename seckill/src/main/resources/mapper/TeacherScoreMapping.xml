@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.geek.ms.mapper.TeacherScoreMapper">
+
+	<select id="selectAllCourse" resultType="com.geek.ms.pojo.po.Course">
+		SELECT c.id,c.name, c.ismust
+		FROM course c 
+		left join course_info ci on c.id = ci.course_id
+		where ci.user_id = #{id} and c.ismust = #{ismust}
+	</select>
+
+</mapper>
