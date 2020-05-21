@@ -18,28 +18,28 @@
 	</select>
 	
 	<select id="queryScore" resultType="com.geek.ms.pojo.vo.ScoreByYears">
-SELECT
-	c.years_id yearsId,
-	c.NAME,
-	s.score 
-FROM
-	score s
-	LEFT JOIN course_info ci ON s.course_info_id = ci.id
-	LEFT JOIN course c ON ci.course_id = c.id 
-WHERE
-	s.user_id = #{id} 
-	AND c.ismust = 1 UNION
-SELECT
-	sci.years_id yearsId,
-	c.NAME,
-	s.score 
-FROM
-	score s
-	INNER JOIN student_course_info sci ON s.course_info_id = sci.course_info_id 
-	AND s.user_id = sci.user_id
-	INNER JOIN course_info ci ON sci.course_info_id = ci.id
-	INNER JOIN course c ON ci.course_id = c.id
-	where sci.user_id = #{id}
+		SELECT
+			c.years_id yearsId,
+			c.NAME,
+			s.score 
+		FROM
+			score s
+			LEFT JOIN course_info ci ON s.course_info_id = ci.id
+			LEFT JOIN course c ON ci.course_id = c.id 
+		WHERE
+			s.user_id = #{id} 
+			AND c.ismust = 1 UNION
+		SELECT
+			sci.years_id yearsId,
+			c.NAME,
+			s.score 
+		FROM
+			score s
+			INNER JOIN student_course_info sci ON s.course_info_id = sci.course_info_id 
+			AND s.user_id = sci.user_id
+			INNER JOIN course_info ci ON sci.course_info_id = ci.id
+			INNER JOIN course c ON ci.course_id = c.id
+			where sci.user_id = #{id}
 	</select>
 
 	<select id="queryCourseClassStudents" resultType="com.geek.ms.pojo.vo.CourseClassStudent">
@@ -105,5 +105,92 @@ FROM
 	<insert id="insertScore">
 		INSERT into score(course_info_id,user_id,score) values(#{courseId}, #{userId}, #{score})
 	</insert>
+
+	<select id="getMustScoreByClassAndTeacherAndCourse" parameterType="com.geek.ms.pojo.vo.ScoreUpHelp" resultType="com.geek.ms.pojo.vo.ScoreByTeacher">
+		select ui.number, ui.realName, s.score
+		from course_info ci
+		left join score s on s.course_info_id = ci.id
+		left join classes_course_info cci on cci.course_info_id = ci.id
+		INNER JOIN `user` u on u.id = s.user_id and u.classes_id = cci.classes_id
+		left join user_info ui on u.id = ui.user_id
+		where cci.classes_id = #{classesId} and ci.user_id = #{userId} and ci.course_id = #{courseId}
+	</select>
+
+	<select id="getClassesByCourseAndTeacher" parameterType="com.geek.ms.pojo.vo.ScoreUpHelp" resultType="com.geek.ms.pojo.po.Class">
+		select 
+			c.id, c.`name` 
+		from 
+			classes c
+		left join classes_course_info cci on cci.classes_id = c.id
+		where cci.course_info_id in (
+			select id
+			from course_info
+			where course_id = #{courseId} and user_id = #{userId}
+		)
+	</select>
+
+	<select id="getXuanScoreByTeacherAndCourrseAndTime" parameterType="com.geek.ms.pojo.vo.ScoreUpHelp" resultType="com.geek.ms.pojo.vo.ScoreByTeacher">
+		select  
+			ui.number, ui.realName, s.score 
+		from 
+			score s
+		left join user_info ui on ui.user_id = s.user_id
+		left join course_info ci on ci.id = s.course_info_id
+		left join course c on ci.course_id = c.id
+		where 
+			s.user_id in(
+				select 
+					sci.user_id 
+				from 
+					student_course_info sci
+				left join course_info ci on sci.course_info_id = ci.id
+				left join course c on ci.course_id = c.id
+				where 
+					ci.user_id = #{userId} and c.id = #{courseId} and Date(sci.time) between #{startTime} and #{endTime}
+			) 
+			and c.id = #{courseId}
+	</select>
+	
+	<select id="getStudentsByClassId" resultType="com.geek.ms.pojo.vo.UserInfo">
+		select u.id, ui.realName, ui.number
+		from `user` u
+		left join user_info ui on ui.user_id = u.id
+		left join classes c on c.id = u.classes_id
+		where c.id = #{courseId}
+	</select>
+
+	<select id="getScoreFlag"  resultType="int" parameterType="com.geek.ms.pojo.vo.ScoreUpHelp">
+		SELECT cci.scoreFlag FROM `classes_course_info` cci
+		left join course_info ci on ci.id = cci.course_info_id
+		left join course c on c.id = ci.course_id
+		left join `user` u on u.id = ci.user_id
+		where u.id = #{userId} and c.id = #{courseId} and cci.classes_id = #{classesId}
+	</select>
+	
+	<select id="getciidByCidAndUid"  resultType="int" parameterType="com.geek.ms.pojo.vo.ScoreUpHelp">
+		select id from course_info where course_id = #{courseId} and user_id = #{userId}
+	</select>
+	
+	<update id="updateScoreFlag" parameterType="com.geek.ms.pojo.vo.ScoreUpHelp">
+		update classes_course_info cci
+		set cci.scoreFlag = 1
+		where cci.course_info_id = #{courseId} and cci.classes_id = #{classesId}
+	</update>
+	
+	<select id="getStudentByCourseId" parameterType="com.geek.ms.pojo.vo.ScoreUpHelp" resultType="com.geek.ms.pojo.vo.UserInfo">
+		SELECT distinct(u.id), ui.number, ui.realName
+		from user_info ui
+		left join `user` u on ui.user_id = u.id
+		left join student_course_info sci on u.id in (
+			select user_id as id from student_course_info where state = 0
+		)
+		left join course_info ci on sci.course_info_id = ci.id
+		where ci.course_id = #{courseId} and ci.user_id = #{userId} and sci.state = 0
+	</select>
+	
+	<select id="updateSciStateByUIAndCiId" parameterType="com.geek.ms.pojo.vo.ScoreUpHelp">
+		update student_course_info set state = 1
+		where user_id = #{userId} and course_info_id = #{courseInfoId}
+	</select>
 
 </mapper>

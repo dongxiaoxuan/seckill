@@ -30,6 +30,14 @@ public interface SeckillCouresService {
 	
 	void setAmountToRedis(int courseId, int amount);
 	
+	void removeUserFromRedisList(int courseId, int userId);
+	
+	void addOwnCourseCountListToRedis(int userId);
+	
+	Integer getOwnCourseCount(int userId);
+	
+	void removeOwnCourse(String hashName);
+	
 	List<?> getCourseStudentListFromRedis(int courseId);
 	
 	List<Integer> loadAllCourseId();

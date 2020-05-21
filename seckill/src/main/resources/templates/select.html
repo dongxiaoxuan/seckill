@@ -56,7 +56,7 @@
                         </li>
 
                         <!-- 新提示 -->
-                        <li class="am-text-sm">
+                        <li class="am-text-sm websocket">
                             <a href="javascript:;">
                                 <i class="am-icon-comments"></i> 聊天室
                             </a>
@@ -108,6 +108,7 @@
 
         <!-- 内容区域 -->
         <div class="tpl-content-wrapper">
+        
 		<div  id="tpl-echarts"></div>
             <div class="row-content am-cf">
             <shiro:hasRole name="student">
@@ -338,7 +339,7 @@
 		
 	});
 	$(".dropbutt").on("click", function() {
-		var ciid = parseInt($(this).attr("id").substr(8,1));
+		var ciid = parseInt($(this).attr("id").substring(8));
 		$.ajax({
     		url : 'select/delete',
     		type : 'post',
@@ -351,6 +352,11 @@
     			alert("失败");
     		}
     	});
+		
+	});
+	$(".websocket").on("click", function() {
+		var username = "[[${session.userSession.username}]]";
+		window.location.href = "http://localhost:8087/LoginController?username=" + username;
 	});
     </script>
 </body>

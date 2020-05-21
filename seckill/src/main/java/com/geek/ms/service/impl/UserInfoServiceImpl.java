@@ -31,4 +31,9 @@ public class UserInfoServiceImpl implements UserInfoService{
 		userInfoMapper.updateUserInfoByUserId(u);
 	}
 
+	@Override
+	public List<UserInfo> selectAllTeacher() {
+		return userInfoMapper.selectAllTeacher();
+	}
+
 }

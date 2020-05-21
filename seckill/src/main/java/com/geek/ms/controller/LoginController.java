@@ -1,5 +1,8 @@
 package com.geek.ms.controller;
 
+
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.SecurityUtils;
@@ -11,7 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.geek.ms.pojo.vo.User;
 import com.geek.ms.service.SeckillCouresService;
@@ -74,6 +80,19 @@ public class LoginController {
 	@RequestMapping("/403")
     public String forbidden(){
         return "403";
+    }
+	
+	@RequestMapping("/LoginController")
+    public ModelAndView login(@RequestParam("username") String username,
+                              Map<String,Object> map){
+        map.put("username",username);
+        return new ModelAndView("chat",map);
+
+    }
+
+    @GetMapping(value = {"/login2"})
+    public ModelAndView client(){
+        return new ModelAndView("login2");
     }
 	
 }

@@ -12,4 +12,6 @@ public interface UserInfoMapper {
 	List<UserInfoDetail> selectAllUserInfoDetail();
 	
 	void updateUserInfoByUserId(UserInfo u);
+	
+	List<UserInfo> selectAllTeacher();
 }

@@ -53,7 +53,6 @@ public class MyShiroRealm extends AuthorizingRealm{
 		Map<String, Object> map = new HashMap<>();
 		map.put("userId", user.getId());
 		List<Resources> resourcesList = resourcesService.loadUserResources(map);
-		System.out.println("resourcesList:" + resourcesList);
 		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 		for(Resources resources : resourcesList) {
 			info.addStringPermission(resources.getUrl());
@@ -62,7 +61,6 @@ public class MyShiroRealm extends AuthorizingRealm{
 		for(Role role : roleList) {
 			info.addRole(role.getName());
 		}
-		System.out.println("realm:"+roleList);
 		Session session = SecurityUtils.getSubject().getSession();
 		session.setAttribute("roleSession", roleList);
 		session.setAttribute("resourcesSession", resourcesList);
@@ -74,9 +72,7 @@ public class MyShiroRealm extends AuthorizingRealm{
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
 		
 		String username = (String)token.getPrincipal();
-		System.out.println(username);
 		User user = userService.selectByUsername(username);
-		System.out.println("user" + user);
 		if (user == null)
 			throw new UnknownAccountException();
 		if(0 == user.getEnable())
@@ -115,7 +111,6 @@ public class MyShiroRealm extends AuthorizingRealm{
                 obj = spc.getPrimaryPrincipal();
                 if(null != obj && obj instanceof User){
                     User user = (User) obj;
-                    System.out.println("user:"+user);
                     //比较用户ID，符合即加入集合
                     if(null != user && userIds.contains(user.getId())){
                         list.add(spc);

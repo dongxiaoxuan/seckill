@@ -1,9 +1,9 @@
 package com.geek.ms.service;
 
-import com.geek.ms.pojo.vo.RoleResources;
-
 public interface RoleResourcesService {
 
-	void addRoleResources(RoleResources roleResources);
+	void addRoleResources(Integer roleId, Integer reId);
+	
+	void deleteRoleResource(Integer roleId, Integer reId);
 	
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.geek.ms.mapper.CourseInfoMapper">
+<mapper namespace="com.geek.ms.mapper.CouresInfoMapper">
 
 	<update id="desAllAmount" parameterType="int">
 		update course_info
@@ -34,25 +34,35 @@
 	</select>
 	
 	<select id="getAllMustCourse" resultMap="mustCourseMap">
-		SELECT c.*,ci.id as ciid,ui.user_id, ui.realName FROM `course` c
-		left join course_info ci on c.id = ci.course_id
+		SELECT ci.id,c.id as cid, c.`name`, c.ismust, c.years_id, c.profession_id,ui.user_id, ui.realName FROM course_info ci
+		left join `course` c on c.id = ci.course_id
 		left join user_info ui on ui.user_id = ci.user_id
 		where c.ismust = 1
 	</select>
 	
-	<resultMap type="com.geek.ms.pojo.po.Course" id="mustCourseMap">
+	<resultMap type="com.geek.ms.pojo.vo.CourseInfo" id="mustCourseMap">
 		<id property="id" column="id" />
-		<result property="name" column="name"></result>
-		<result property="ismust" column="ismust"></result>
-		<result property="yearsId" column="years_id"></result>
-		<result property="professionId" column="profession_id"></result>
-		<association property="courseInfo" javaType="com.geek.ms.pojo.vo.CourseInfo">
-			<id property="id" column="ciid" />
+		<association property="course" javaType="com.geek.ms.pojo.po.Course">
+			<id property="id" column="cid" />
+			<result property="name" column="name"></result>
+			<result property="ismust" column="ismust"></result>
+			<result property="yearsId" column="years_id"></result>
+			<result property="professionId" column="profession_id"></result>
 		</association>
 		<association property="userInfo" javaType="com.geek.ms.pojo.vo.UserInfo">
 			<result property="userId" column="user_id"></result>
 			<result property="realName" column="realName"></result>
 		</association>
 	</resultMap>
+	
+	<update id="updateTeacherByCourseId" parameterType="com.geek.ms.pojo.vo.CourseInfo">
+		update course_info set user_id = #{userId}
+		where id = #{id}
+	</update>
+	
+	<update id="updateCourseNameById" parameterType="com.geek.ms.pojo.po.Course">
+		update course set name = #{name}
+		where id = #{id}
+	</update>
 
 </mapper>

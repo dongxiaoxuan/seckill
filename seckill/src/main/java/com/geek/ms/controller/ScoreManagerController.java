@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,8 +16,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.geek.ms.pojo.po.Course;
 import com.geek.ms.pojo.vo.CourseClassStudent;
+import com.geek.ms.pojo.vo.ScoreUpHelp;
 import com.geek.ms.pojo.vo.StudentCourseInfo;
 import com.geek.ms.pojo.vo.StudentInfoToTeacher;
+import com.geek.ms.pojo.vo.UserInfo;
 import com.geek.ms.service.CourseService;
 import com.geek.ms.service.ScoreService;
 import com.geek.ms.util.FormatTime;
@@ -63,7 +66,7 @@ public class ScoreManagerController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping("/update")
 	@ResponseBody
-	public Integer update(int courseId,@RequestParam String json) {
+	public Integer update(@RequestParam("courseId") Integer courseId, @RequestParam("classesId") Integer classesId, @RequestParam String json) {
 		Gson gson = new Gson();
 		List<Map<String, String>> list = new ArrayList<Map<String,String>>();
 		list = gson.fromJson(json, list.getClass());
@@ -83,11 +86,83 @@ public class ScoreManagerController {
 			   i ++;
 			}
 		}
-		//System.out.println(result);
+		Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("userSessionId");
+		ScoreUpHelp sh = new ScoreUpHelp();
+		sh.setUserId(userId); sh.setClassesId(classesId); sh.setCourseId(courseId);
+		Integer courseInfoId = scoreService.getciidByCidAndUid(sh);
+		sh.setCourseId(courseInfoId);
+		scoreService.updateScoreFlag(sh);
 		Integer result = 0;
 		for(int key : resultMap.keySet()){
 			int value = resultMap.get(key);
 			result = scoreService.insertScore(courseId, key, value);
+		}
+		return result;
+	}
+	
+	@RequiresRoles(value={"teacher"})
+	@RequestMapping("/getStudents")
+	@ResponseBody
+	public List<?> getStudents(ScoreUpHelp sh, Model model) {
+		int userId = (int) SecurityUtils.getSubject().getSession().getAttribute("userSessionId");
+		sh.setUserId(userId);
+		if(scoreService.getScoreFlag(sh) == 0) {
+			List<UserInfo> students = scoreService.getStudentsByClassId(sh.getClassesId());
+			return students;
+		}else {
+			List<String> flag = new ArrayList<String>();
+			flag.add("alreadyHave");
+			return flag;
+		}
+		
+	}
+	
+	@RequiresRoles(value={"teacher"})
+	@RequestMapping("/getStudents2")
+	@ResponseBody
+	public List<?> getStudents2(ScoreUpHelp sh, Model model) {
+		int userId = (int) SecurityUtils.getSubject().getSession().getAttribute("userSessionId");
+		sh.setUserId(userId);
+		List<UserInfo> students = scoreService.getStudentByCourseId(sh);
+		return students;
+		
+	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/update2")
+	@ResponseBody
+	public Integer update2(@RequestParam("courseId") Integer courseId, @RequestParam String json) {
+		Gson gson = new Gson();
+		List<Map<String, String>> list = new ArrayList<Map<String,String>>();
+		list = gson.fromJson(json, list.getClass());
+		Map<Integer, Integer> resultMap = new HashMap<>();
+		for(Map<String, String> map : list) {
+			int i = 1;
+			Integer rkey = 0;
+			Integer rvalue = 0;
+			for(String key : map.keySet()){
+			   String value = map.get(key);
+			   if(i % 2 == 0) {
+				   rvalue = Integer.parseInt(value);
+				   resultMap.put(rkey, rvalue);
+			   }else {
+				   rkey = Integer.parseInt(value);
+			   }
+			   i ++;
+			}
+		}
+		System.out.println(resultMap);
+		Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("userSessionId");
+		ScoreUpHelp sh = new ScoreUpHelp();
+		sh.setUserId(userId);  sh.setCourseId(courseId);
+		Integer courseInfoId = scoreService.getciidByCidAndUid(sh);
+		sh.setCourseInfoId(courseInfoId);
+		Integer result = 0;
+		for(int key : resultMap.keySet()){
+			int value = resultMap.get(key);
+			result = scoreService.insertScore(courseId, key, value);
+			sh.setUserId(key);
+			scoreService.updateSciStateByUIAndCiId(sh);
 		}
 		return result;
 	}

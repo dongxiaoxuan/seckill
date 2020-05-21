@@ -14,8 +14,8 @@ public class Course implements Serializable{
 	private int ismust;
 	private Integer yearsId;
 	private Integer professionId;
-	private UserInfo userInfo;
-	private CourseInfo courseInfo;
+	UserInfo userInfo;
+	CourseInfo courseInfo;
 	public Course() {
 		super();
 	}
@@ -45,13 +45,13 @@ public class Course implements Serializable{
 	public void setIsmust(int ismust) {
 		this.ismust = ismust;
 	}
-	public int getYearsId() {
+	public Integer getYearsId() {
 		return yearsId;
 	}
 	public void setYearsId(Integer yearsId) {
 		this.yearsId = yearsId;
 	}
-	public int getProfessionId() {
+	public Integer getProfessionId() {
 		return professionId;
 	}
 	public void setProfessionId(Integer professionId) {

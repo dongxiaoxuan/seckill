@@ -11,6 +11,7 @@ import com.geek.ms.mapper.StudentCourseInfoMapper;
 import com.geek.ms.pojo.po.Course;
 import com.geek.ms.pojo.po.Festivals;
 import com.geek.ms.pojo.po.Week;
+import com.geek.ms.pojo.vo.CourseInfo;
 import com.geek.ms.pojo.vo.CourseTable;
 import com.geek.ms.pojo.vo.StudentCourseInfo;
 import com.geek.ms.pojo.vo.StudentInfoToTeacher;
@@ -54,8 +55,18 @@ public class CourseServiceImpl implements CourseService{
 	}
 
 	@Override
-	public List<Course> getAllMustCourse() {
+	public List<CourseInfo> getAllMustCourse() {
 		return courseInfoMapper.getAllMustCourse();
+	}
+
+	@Override
+	public int updateTeacherByCourseId(CourseInfo courseInfo) {
+		return courseInfoMapper.updateTeacherByCourseId(courseInfo);
+	}
+
+	@Override
+	public int updateCourseNameById(Course course) {
+		return courseInfoMapper.updateCourseNameById(course);
 	}
 
 }

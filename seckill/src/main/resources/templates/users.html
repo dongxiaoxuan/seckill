@@ -60,7 +60,7 @@
                         </li>
 
                         <!-- 新提示 -->
-                        <li class="am-text-sm">
+                        <li class="am-text-sm websocket">
                             <a href="javascript:;">
                                 <i class="am-icon-comments"></i> 聊天室
                             </a>
@@ -125,8 +125,8 @@
             <button class="addbutt am-btn am-btn-success am-btn-xs am-radius">添加</button>
 <!-- 添加 -->
 <form id="hiddenForm2">
-	<input type="text" name="username" id="username" />
-	<input type="password" name="password" id="password" />
+	用户名：<input type="text" name="username" id="username" />
+	密码：<input type="password" name="password" id="password" />
 	<input type="button" value="提交" id="addsubmitbutt" class=" am-btn am-btn-default am-btn-xs am-radius" />
 </form>
 <table style="border-top:0;border-left:0;border-right:0;table-layout: fixed;" class="am-table am-table-compact am-table-bordered am-table-radius tpl-table-black " >
@@ -293,6 +293,10 @@ window.onload=function(){
 			alert("该用户暂无角色，请手动设置");
 			$(this).html($(".hideroleselect").html());
 		}
+	});
+	$(".websocket").on("click", function() {
+		var username = "[[${session.userSession.username}]]";
+		window.location.href = "http://localhost:8087/LoginController?username=" + username;
 	});
 }
 

@@ -57,7 +57,7 @@
                         </li>
 
                         <!-- 新提示 -->
-                        <li class="am-text-sm">
+                        <li class="am-text-sm websocket">
                             <a href="javascript:;">
                                 <i class="am-icon-comments"></i> 聊天室
                             </a>
@@ -112,80 +112,69 @@
             
             	<shiro:hasRole name="teacher">
             	<div id="tpl-echarts"></div>
-            	<!-- <p th:text="${allCstudents}"></p>
-            	<p th:text="${sitts}"></p>
-            	<p th:text="${courses}"></p>
-            	<p th:text="${students}"></p> -->
-            	<th:block th:each="sitt,i : ${sitts}">
-            	<th:block th:if="${haveScores2.get(i.index) == 0}">
+            	
             	<div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+                	<div class="widget am-cf">
+                		<div class="widget-head am-cf">
+                                <div class="widget-title am-fl">查询系统</div>
+                       	</div>
+                       	<form id="infoForm" action="#" class="am-form tpl-form-line-form">
+                        <div class="widget-head am-cf">
+                        	<div class="am-form-group">
+			      				<label for="type">选修/必修</label>
+			      				<select id="type">
+			      					<option disabled="disabled" selected>请选择类型</option>
+			      					<option th:value="1">必修</option>
+			      					<option th:value="0">选修</option>
+			      				</select>
+		    				</div>
+		    			</div>
+		    			<div class="widget-head am-cf">
+                            <div class="am-form-group">
+						       	<label for="pro">选择课程</label>
+						      	<select id="pro">
+						       		<option disabled="disabled" selected>请选择课程</option>
+						       	</select>
+					        </div>
+						</div>
+						<div class="widget-head am-cf classDiv" style="display: none;">
+	                           <div class="am-form-group">
+							      <label for="classSelect">选择班级</label>
+							      <select id="classSelect">
+							      		<option disabled="disabled" selected>请选择班级</option>
+							      </select>
+							   </div>
+						</div>
+		    			</form>
+            		</div>
+            	</div>
+            	
+                	<div class="am-u-sm-12 am-u-md-12 am-u-lg-12 mustDiv" style="display: none;">
                         <div class="widget am-cf">
                             <div class="widget-head am-cf">
-                                <div class="widget-title am-fl">选修录入</div>
+                                <div class="widget-title am-fl">成绩录入</div>
                                 <div class="widget-function am-fr">
                                     <a href="javascript:;" class="am-icon-cog"></a>
                                 </div>
                             </div>
                             <div class="widget-body  widget-body-lg am-fr">
+                            	<h1 id="studentTitle" style="font-weight: 500;text-align: center;"></h1>
                             	<table class="am-table am-table-compact tpl-table-black ">
-					           		<caption style="font-size: 35px; padding-bottom: 30px;" th:text="${sitt.getName()} "></caption>
 		                       		<tr>
 		                           		<th style="border-top: 0;vertical-align:middle;text-align: center;">学号</th>
 		                           		<th style="border-top: 0;vertical-align:middle;text-align: center;">姓名</th>
 		                           		<th style="border-top: 0;vertical-align:middle;text-align: center;">成绩</th>
 		                           	</tr>
-		                           	<th:block th:each="c : ${students}">
-			                           	<tr class="tdtr" th:if="${c.getCouresInfoId() == sitt.getCiid() }" th:each="ui : ${c.getUserInfo()}">
-			                            	<td style="vertical-align:middle;text-align: center;" th:text="${ui.getNumber()}"></td>
-			                            	<td style="vertical-align:middle;text-align: center;" th:text="${ui.getRealName()}"></td>
-			                            	<td><form class="am-form tpl-form-line-form">
-			                            	<input type="text" class="tpl-form-input scoreInput" th:id="${ui.getUserId()}" placeholder="请输入成绩"></form></td>
-			                            </tr>
-		                           	</th:block>
-		                        </table>
-                            </div>
-                            <button style="float:right;" type="button" th:id="courseButt + ${sitt.getId()}" class="am-btn am-btn-primary submitScoreButt"><i class="am-icon-save"></i>&nbsp;核对无误,录入</button>
-                            <button style="float:right; " type="button" class="am-btn am-btn-default am-round voice"><i style=" font-size: 18px;" class="am-icon-microphone"></i></button>
-                        </div>
-                </div>
-                </th:block>
-                </th:block>
-                <th:block th:each="c,i : ${courses}">
-                <th:block th:if="${haveScores.get(i.index) == 0}">
-                	<div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
-                        <div class="widget am-cf">
-                            <div class="widget-head am-cf">
-                                <div class="widget-title am-fl">必修录入</div>
-                                <div class="widget-function am-fr">
-                                    <a href="javascript:;" class="am-icon-cog"></a>
-                                </div>
-                            </div>
-                            <div class="widget-body  widget-body-lg am-fr">
-                            	<table class="am-table am-table-compact tpl-table-black ">
-					           		<caption style="font-size: 35px; padding-bottom: 30px;" th:text="${c.getName()} "></caption>
-		                       		<tr>
-		                           		<th style="border-top: 0;vertical-align:middle;text-align: center;">学号</th>
-		                           		<th style="border-top: 0;vertical-align:middle;text-align: center;">姓名</th>
-		                           		<th style="border-top: 0;vertical-align:middle;text-align: center;">成绩</th>
-		                           	</tr>
-		                           	<th:block th:each="ccs : ${allCstudents.get(i.index)}">
-		                           	<tr class="tdtr">
+		                           	<tbody	class="studentTbody">
 		                           	
-			                            	<td style="vertical-align:middle;text-align: center;" th:text="${ccs.getNumber()}"></td>
-			                            	<td style="vertical-align:middle;text-align: center;" th:text="${ccs.getRealName()}"></td>
-			                            	<td><form class="am-form tpl-form-line-form">
-			                            	<input type="text" class="tpl-form-input scoreInput" th:id="${ccs.getUserId()}" placeholder="请输入成绩"></form></td>
-		                           
-		                           	</tr>
-		                           	</th:block>
+		                           	</tbody>
 		                         </table>
 		                     </div>
-		                     <button style="float:right;" type="button" th:id="courseButt + ${c.getId()}" class="am-btn am-btn-primary submitScoreButt"><i class="am-icon-save"></i>&nbsp;核对无误,录入</button>
-		                 	 <button style="float:right; " type="button" class="am-btn am-btn-default am-round voice"><i style=" font-size: 18px;" class="am-icon-microphone"></i></button>
+		                     <div class="buttonDiv">
+		                 	 
+		                 	 </div>
 		                 </div>
 		             </div>
-		        </th:block>
-                </th:block>
             	</shiro:hasRole>
             	
             </div>
@@ -202,48 +191,191 @@
 			this.value = value;
 		}
     	$(function() {
-    		$(".submitScoreButt").on("click", function() {
-    			var array = [];
-    			$(this).parent().find("tr").filter(".tdtr").each(function(i) {
-    				var input = $(this).find("input");
-    				if(input.val() == "" || input.val() == null || parseInt(input.val()) < 0) {
-    					alert("您输入的成绩有误，请重新输入");
-    					return false;
-    				}else{
-    					var key = input.attr("id");
-    					var value = input.val();
-    					var m = new Map(key, value);
-    					array.push(m);
-    				}
-    			});
-    			var jsonData = JSON.stringify(array);
-    			var courseId = $(this).attr("id").split("courseButt")[1];
-    			$.ajax({
-    				url : 'ScoreManager/update',
-    				data : {
-    					json : jsonData,
-    					courseId : courseId
-    				},
-    				success : function(result) {
-    					if(result > 0) {
-    						alert("录入成功");
-    						window.location.href="/ScoreManager";
-    					}
-    				}
-    			});
-    		});
-    		$(".voice").on("click", function() {
-    			var text = "";
-    			$(this).parent().find(".scoreInput").each(function(i) {
-    				text += $(this).val() + ",";
-    			});
-    			$.ajax({
-    				url : 'speech/score',
-    				type : 'post',
-    				data : {
-    					text : text
-    				}
-    			});
+    		
+    		$("#type").change(function() {
+   				var ismust = $(this).val();
+   				if($(this).val() == '0') {
+   					$(".classDiv").hide();
+   				}else {
+   					$(".classDiv").show();
+   				}
+   				$.ajax({
+   					type : 'post',
+   					url : 'teacherScore/getCourse',
+   					data : {
+   						ismust : parseInt(ismust)
+   					},
+   					dataType : 'json',
+   					success : function(data) {
+   						$("#pro").html('<option disabled="disabled" selected>请选择课程</option>');
+   						for(var i = 0; i < data.length; i ++) {
+   							$("#pro").append("<option class='classOption' value='"+data[i].id+"'>"+data[i].name+"</option>");
+   						}
+   					}.bind(this)
+   				});
+   			});
+    		$("#pro").change(function() {
+    			var courseId = $(this).val();
+    			var courseName = $("#pro").find("option:selected").text();
+   				if($("#type").val() == 1) {
+   	   				$.ajax({
+   	   					type : 'post',
+   	   					url : 'teacherScore/getClasses',
+   	   					data : {
+   	   						courseId : courseId
+   	   					},
+   	   					dataType : 'json',
+   	   					success : function(data) {
+   	   						$("#classSelect").html('<option disabled="disabled" selected>请选择班级</option>');
+   	   						for(var i = 0; i < data.length; i ++) {
+   	   							$("#classSelect").append("<option class='classOption' value='"+data[i].id+"'>"+data[i].name+"</option>");
+   	   						}
+   	   					}.bind(this)
+   	   				});
+   				}else {
+   					$.ajax({
+   	   					type : 'post',
+   	   					url : 'ScoreManager/getStudents2',
+   	   					data : {
+   	   						courseId : courseId,
+   	   					},
+   	   					dataType : 'json',
+   	   					success : function(data) {
+   							$(".mustDiv").show();
+   							$(".studentTbody").html('');
+   							$("#studentTitle").html("<span><span style='color:#0077AA;'>" + courseName + "</span></span>");
+   							for(var i = 0; i < data.length; i ++) {
+   								$(".studentTbody").append('<tr class="tdtr"><td style="vertical-align:middle;text-align: center;">' + data[i].number + '</td><td style="vertical-align:middle;text-align: center;">' + data[i].realName + '</td><td><form class="am-form tpl-form-line-form"><input type="text" class="tpl-form-input scoreInput" id="' + data[i].id + '" placeholder="请输入成绩"></form></td></tr>');
+   							}
+   							$(".buttonDiv").append('<button style="float:right; " type="button" class="am-btn am-btn-default am-round voice"><i style=" font-size: 18px;" class="am-icon-microphone"></i></button>');
+   							$(".buttonDiv").append('<button style="float:right;" type="button" id="courseButt' + courseId + '" class="am-btn am-btn-primary submitScoreButt"><i class="am-icon-save"></i>&nbsp;核对无误,录入</button>');
+   							
+   							$(".buttonDiv").on("click",".submitScoreButt", function() {
+   				    			var array = [];
+   				    			$(this).parent().prev().find(".tdtr").each(function(i) {
+   				    				var input = $(this).find("input");
+   				    				if(input.val() == "" || input.val() == null || parseInt(input.val()) < 0) {
+   				    					alert("您输入的成绩有误，请重新输入");
+   				    					return false;
+   				    				}else{
+   				    					var key = input.attr("id");
+   				    					var value = input.val();
+   				    					var m = new Map(key, value);
+   				    					array.push(m);
+   				    				}
+   				    			});
+   				    			
+   				    			var jsonData = JSON.stringify(array);
+   				    			var courseId = $(this).attr("id").split("courseButt")[1];
+   				    			$.ajax({
+   				    				url : 'ScoreManager/update2',
+   				    				data : {
+   				    					json : jsonData,
+   				    					courseId : parseInt(courseId)
+   				    				},
+   				    				success : function(result) {
+			    						alert("录入成功");
+			    						window.location.href="/ScoreManager";
+   				    				}
+   				    			});
+   				    		});
+   							$(".buttonDiv").on("click",".voice", function() {
+   				    			var text = "";
+   				    			$(this).parent().parent().find(".scoreInput").each(function(i) {
+   				    				text += $(this).val() + ",";
+   				    			});
+   				    			$.ajax({
+   				    				url : 'speech/score',
+   				    				type : 'post',
+   				    				data : {
+   				    					text : text
+   				    				}
+   				    			});
+   				    		});
+   	   						
+   	   					}.bind(this)
+   	   				});
+   				}
+   			});
+    		$('#classSelect').on('change',function(){
+    			$(".mustDiv").hide();
+    			$(".buttonDiv").html('');
+   				var className = $(this).find("option:selected").text();
+   				var courseName = $("#pro").find("option:selected").text();
+   				var courseId = $("#pro").val();
+   				var classesId = $(this).val();
+   				$.ajax({
+   					type : 'post',
+   					url : 'ScoreManager/getStudents',
+   					data : {
+   						courseId : courseId,
+   						classesId : classesId
+   					},
+   					dataType : 'json',
+   					success : function(data) {
+   						if(data[0] == 'alreadyHave') {
+   							alert("本课程该班级成绩已录入!");
+   						}else {
+   							$(".mustDiv").show();
+   							$(".studentTbody").html('');
+   							$("#studentTitle").html("<span><span style='color:#0077AA;'>" + courseName + "</span><small style='font-weight: 400;'>（" + className + "）</small></span>");
+   							for(var i = 0; i < data.length; i ++) {
+   								$(".studentTbody").append('<tr class="tdtr"><td style="vertical-align:middle;text-align: center;">' + data[i].number + '</td><td style="vertical-align:middle;text-align: center;">' + data[i].realName + '</td><td><form class="am-form tpl-form-line-form"><input type="text" class="tpl-form-input scoreInput" id="' + data[i].id + '" placeholder="请输入成绩"></form></td></tr>');
+   							}
+   							$(".buttonDiv").append('<button style="float:right; " type="button" class="am-btn am-btn-default am-round voice"><i style=" font-size: 18px;" class="am-icon-microphone"></i></button>');
+   							$(".buttonDiv").append('<button style="float:right;" type="button" id="courseButt' + courseId + '" class="am-btn am-btn-primary submitScoreButt"><i class="am-icon-save"></i>&nbsp;核对无误,录入</button>');
+   							
+   							$(".buttonDiv").on("click",".submitScoreButt", function() {
+   				    			var array = [];
+   				    			$(this).parent().prev().find(".tdtr").each(function(i) {
+   				    				var input = $(this).find("input");
+   				    				if(input.val() == "" || input.val() == null || parseInt(input.val()) < 0) {
+   				    					alert("您输入的成绩有误，请重新输入");
+   				    					return false;
+   				    				}else{
+   				    					var key = input.attr("id");
+   				    					var value = input.val();
+   				    					var m = new Map(key, value);
+   				    					array.push(m);
+   				    				}
+   				    			});
+   				    			
+   				    			var jsonData = JSON.stringify(array);
+   				    			var courseId = $(this).attr("id").split("courseButt")[1];
+   				    			$.ajax({
+   				    				url : 'ScoreManager/update',
+   				    				data : {
+   				    					json : jsonData,
+   				    					courseId : parseInt(courseId),
+   				    					classesId : parseInt(classesId)
+   				    				},
+   				    				success : function(result) {
+			    						alert("录入成功");
+			    						window.location.href="/ScoreManager";
+   				    				}
+   				    			});
+   				    		});
+   							$(".buttonDiv").on("click",".voice", function() {
+   				    			var text = "";
+   				    			$(this).parent().parent().find(".scoreInput").each(function(i) {
+   				    				text += $(this).val() + ",";
+   				    			});
+   				    			$.ajax({
+   				    				url : 'speech/score',
+   				    				type : 'post',
+   				    				data : {
+   				    					text : text
+   				    				}
+   				    			});
+   				    		});
+   							
+   						}
+   					}.bind(this)
+   				});
+   			});
+    		$(".websocket").on("click", function() {
+    			var username = "[[${session.userSession.username}]]";
+    			window.location.href = "http://localhost:8087/LoginController?username=" + username;
     		});
     	});
     </script>

@@ -174,17 +174,50 @@ public class SeckillCouresServiceImpl implements SeckillCouresService{
 		String amount = (String) redisTemplate.opsForHash().get("coures_student_" + courseId, "amount");
 		return amount;
 	}
-
+	
+	@Override
+	public void addOwnCourseCountListToRedis(int userId) {
+		Integer count = (Integer.valueOf((String) redisTemplate.opsForHash().get("student_count_" + userId, "count"))) + 1;
+		redisTemplate.opsForHash().put("student_count_" + userId, "count", count + "");
+	}
+	
+	@Override
+	public Integer getOwnCourseCount(int userId) {
+		if(redisTemplate.opsForHash().get("student_count_" + userId, "count") == null) {
+			redisTemplate.opsForHash().put("student_count_" + userId, "count", "0");
+		}
+		Integer result = Integer.valueOf((String) redisTemplate.opsForHash().get("student_count_" + userId, "count"));
+		
+		return result;
+	}
+	
 	@Override
 	public void setAmountToRedis(int courseId, int amount) {
 		redisTemplate.opsForHash().put("coures_student_" + String.valueOf(courseId), "amount", String.valueOf(amount));
 	}
-	
+	//退课
+	@Override
+	public void removeUserFromRedisList(int couresInfoId, int userId) {
+		redisTemplate.opsForHash().increment("coures_student_" + couresInfoId , "amount", 1);
+		redisTemplate.opsForList().remove("coures_student_list_" + couresInfoId, 1, String.valueOf(userId));
+		if(redisTemplate.opsForHash().get("student_count_" + userId, "count") == null || Integer.valueOf((String) redisTemplate.opsForHash().get("student_count_" + userId, "count")) == 0) {
+			redisTemplate.opsForHash().put("student_count_" + userId, "count", "0");
+		}else {
+			Integer count = (Integer.valueOf((String) redisTemplate.opsForHash().get("student_count_" + userId, "count"))) - 1;
+			redisTemplate.opsForHash().put("student_count_" + userId, "count", count + "");//选课量-1
+		}
+		
+	}
 	@Override
 	public List<?> getCourseStudentListFromRedis(int courseId) {
 		Long size = redisTemplate.opsForList().size("coures_student_list_" + String.valueOf(courseId));
 		List<?> csList = (List<?>) redisTemplate.opsForList().range("coures_student_list_" + String.valueOf(courseId), 0, size);
 		return csList;
+	}
+	
+	@Override
+	public void removeOwnCourse(String hashName) {
+		redisTemplate.opsForHash().delete(hashName, "count");
 	}
 	
 	@Override

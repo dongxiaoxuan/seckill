@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.geek.ms.pojo.vo.Resources;
 import com.geek.ms.pojo.vo.Role;
+import com.geek.ms.service.RoleResourcesService;
 import com.geek.ms.service.RoleService;
 
 @Controller
@@ -19,6 +20,9 @@ public class RoleController {
 
 	@Autowired
 	private RoleService roleService;
+	
+	@Autowired
+	private RoleResourcesService roleResourcesService;
 	
 	@RequestMapping
 	public String getAllResources(@RequestParam(required = false, defaultValue = "0") int start, 
@@ -45,4 +49,17 @@ public class RoleController {
 		return otherUrl;
 	}
 	
+	@RequestMapping("/addResource")
+	@ResponseBody
+	public String addResource(Integer roleId, Integer reId) {
+		roleResourcesService.addRoleResources(roleId, reId);
+		return "success";
+	}
+	
+	@RequestMapping("/deleteResource")
+	@ResponseBody
+	public String deleteResource(Integer roleId, Integer reId) {
+		roleResourcesService.deleteRoleResource(roleId, reId);
+		return "success";
+	}
 }

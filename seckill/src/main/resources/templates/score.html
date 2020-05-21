@@ -57,7 +57,7 @@
                         </li>
 
                         <!-- 新提示 -->
-                        <li class="am-text-sm">
+                        <li class="am-text-sm websocket">
                             <a href="javascript:;">
                                 <i class="am-icon-comments"></i> 聊天室
                             </a>
@@ -142,5 +142,10 @@
     <script src="assets/js/dataTables.responsive.min.js"></script>
     <script src="assets/js/app.js"></script>
 </body>
-
+<script type="text/javascript">
+	$(".websocket").on("click", function() {
+		var username = "[[${session.userSession.username}]]";
+		window.location.href = "http://localhost:8087/LoginController?username=" + username;
+	});
+</script>
 </html>

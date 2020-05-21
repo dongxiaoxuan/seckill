@@ -97,6 +97,7 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setFilters(filterMap);
         //拦截器.
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
+        filterChainDefinitionMap.put("/select/test", "anon");
         filterChainDefinitionMap.put("/favicon.ico", "anon");
         filterChainDefinitionMap.put("/logout", "logout");
         filterChainDefinitionMap.put("/css/**","anon");

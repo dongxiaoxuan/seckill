@@ -60,7 +60,7 @@
                         </li>
 
                         <!-- 新提示 -->
-                        <li class="am-text-sm">
+                        <li class="am-text-sm websocket">
                             <a href="javascript:;">
                                 <i class="am-icon-comments"></i> 聊天室
                             </a>
@@ -121,8 +121,8 @@
                                     <a href="javascript:;" class="am-icon-cog"></a>
                                 </div>
                             </div>
-                            <div class="widget-body  widget-body-lg am-fr">
-
+                            
+                            <div class="widget-body">
                                 <table style="border-top:0;border-left:0;border-right:0;table-layout: fixed;" class="am-table am-table-compact am-table-bordered am-table-radius tpl-table-black " >
 	<thead>
 		<tr>
@@ -135,6 +135,7 @@
 	<tbody>
 	
 		<tr th:each="role,roleStat : ${roles}" class="roletr">
+		
 			<td th:text="${role.id}" class="id">1</td>
 			<td th:text="${role.roleName}">name</td>
 			<td>
@@ -143,10 +144,13 @@
 						<option th:value="${resource.id}" th:text="${resource.url}"></option>
 					</th:block>
 				</select>
+				<button class="am-btn am-btn-danger am-btn-xs am-radius deleteRe">删除</button>
 			</td>
+			
 			<td>
 				<button class="am-btn am-btn-secondary am-btn-xs am-radius otherbutt">选择资源</button>
-				<select class="otherresourcesselect"></select>
+				<select class="otherresourcesselect" style="display: none;"></select>
+				<button class="am-btn am-btn-success am-btn-xs am-radius preserveRe" style="display: none;">添加</button>
 			</td>
 		</tr>
 	</tbody>
@@ -194,9 +198,48 @@ $(function(){
 				for(var i = 0; i < data.length; i ++) {
 					$(this).siblings(".otherresourcesselect").append("<option class='confirm' value='"+data[i].id+"'>"+data[i].url+"</option>");
 					$(this).siblings(".otherresourcesselect").show();
+					$(this).siblings(".preserveRe").show();
 				}
 			}.bind(this)
 		});
+	});
+	$(".preserveRe").click(function() {
+		var roleId = $(this).parent().parent().find(".id").text();
+		var reId = $(this).prev().val();
+		
+		$.ajax({
+			type : 'post',
+			url : 'roles/addResource',
+			data : {
+				roleId : roleId,
+				reId : reId
+			},
+			success : function(data) {
+				alert("添加成功");
+				window.location.href="roles";
+			}
+		});
+	});
+	$(".deleteRe").click(function() {
+		var roleId = $(this).parent().parent().find(".id").text();
+		var reId = $(this).prev().val();
+		
+		$.ajax({
+			type : 'post',
+			url : 'roles/deleteResource',
+			data : {
+				roleId : roleId,
+				reId : reId
+			},
+			success : function(data) {
+				alert("删除成功");
+				window.location.href="roles";
+			}
+		});
+	});
+	$(".websocket").on("click", function() {
+		var username = "[[${session.userSession.username}]]";
+		window.location.href = "http://localhost:8087/LoginController?username=" + username;
 	});
 });
 </script>

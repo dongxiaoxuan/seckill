@@ -48,6 +48,8 @@ public class SeckillCouresController {
 	@Autowired
 	private Environment env;
 	
+	private List<String> studentCounts = new ArrayList<String>();
+	
 	@RequiresRoles(value={"student","admin"},logical=Logical.OR)
 	@RequestMapping
 	public String into(
@@ -121,6 +123,12 @@ public class SeckillCouresController {
 			for(Integer courseId : courseIds) {
 				seckillCouresService.saveDataWhenClose(courseId);
 			}
+			//删除所有学生本次选课数量
+			
+			for(String hashName : studentCounts) {
+				System.out.println(hashName);
+				seckillCouresService.removeOwnCourse(hashName);
+			}
 		}else {
 			//开启选课时
 			List<String> amountsList = JSON.parseArray("[" + amounts + "]", String.class);
@@ -141,8 +149,8 @@ public class SeckillCouresController {
 	public String delete(Integer ciid) {
 		Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("userSessionId");
 		Integer result = seckillCouresService.dropCourseById(userId, ciid);
+		seckillCouresService.removeUserFromRedisList(ciid, userId);
 		/*
-		 * 缺少：
 		 * 1.redis课余量hset + 1
 		 * 2.reids学生选课hset删除指定数据
 		 */
@@ -177,25 +185,46 @@ public class SeckillCouresController {
 			for(String str : s) {
 				result.add(Integer.parseInt(str.replace("[", "").replace("\"", "").replace("]", "")));
 			}
-			sc.setUserId((int) SecurityUtils.getSubject().getSession().getAttribute("userSessionId"));
-			for(Integer i : result) {
-				sc.setCouresInfoId(i);
-				try {
-					logger.info("生产端:开始入队");
-					rabbitTemplate.setExchange(env.getProperty("seckill.exchange.name"));
-					System.out.println(sc);
-					rabbitTemplate.convertAndSend(MessageBuilder.withBody(BeanString.beanToString(sc).getBytes("UTF-8")).build());
-					resultMap.put("课程" + i, "成功");
-				}catch (Exception e) {
-					resultMap.put("课程" + i, "失败");
-					e.printStackTrace();
+			Integer userId = (Integer) SecurityUtils.getSubject().getSession().getAttribute("userSessionId");
+			sc.setUserId(userId);
+			if(seckillCouresService.getOwnCourseCount(userId) + result.size() <= 3) {
+				for(Integer i : result) {
+					sc.setCouresInfoId(i);
+					try {
+						logger.info("生产端:开始入队");
+						rabbitTemplate.setExchange(env.getProperty("seckill.exchange.name"));
+						rabbitTemplate.convertAndSend(MessageBuilder.withBody(BeanString.beanToString(sc).getBytes("UTF-8")).build());
+						resultMap.put("课程" + i, "成功");
+					}catch (Exception e) {
+						resultMap.put("课程" + i, "失败");
+						e.printStackTrace();
+					}
 				}
+				studentCounts.add("student_count_" + userId);
+			}else {
+				resultMap.put("选课失败", "本次选课已达到选修数量的上限");
 			}
 		}else {
 			resultMap.put("message", "请勿非法访问！");
 		}
 		
 		return resultMap;
+	}
+	//压力测试用例
+	@RequestMapping(value = "/test")
+	@ResponseBody
+	public String test(String s) {
+		try {
+			rabbitTemplate.setExchange(env.getProperty("seckill.exchange.name"));
+			rabbitTemplate.convertAndSend(MessageBuilder.withBody(s.getBytes("UTF-8")).build());
+			//System.out.println("2020-04-28 17:03:42.156  WARN 8972 --- [cTaskExecutor-1] o.s.a.s.c.Jackson2JsonMessageConverter   : Could not convert incoming message with content-type [application/octet-stream], 'json' keyword missing.");
+			//System.out.println(s);
+		}catch (Exception e) {
+			e.printStackTrace();
+			return "false";
+		}
+		
+		return "success";
 	}
 	
 }

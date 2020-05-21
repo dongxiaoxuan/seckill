@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>geek教务个人中心</title>
+    <title>geek教务站内搜索</title>
     <meta name="description" content="这是一个 index 页面">
     <meta name="keywords" content="index">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -60,7 +60,7 @@
                         </li>
 
                         <!-- 新提示 -->
-                        <li class="am-text-sm">
+                        <li class="am-text-sm websocket">
                             <a href="javascript:;">
                                 <i class="am-icon-comments"></i> 聊天室
                             </a>
@@ -154,6 +154,11 @@
     <script src="./assets/js/dataTables.responsive.min.js"></script>
     <script src="./assets/js/app.js"></script>
 </body>
-
+<script type="text/javascript">
+	$(".websocket").on("click", function() {
+		var username = "[[${session.userSession.username}]]";
+		window.location.href = "http://localhost:8087/LoginController?username=" + username;
+	});
+</script>
 </html>
 

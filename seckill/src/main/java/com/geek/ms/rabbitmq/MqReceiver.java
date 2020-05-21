@@ -23,10 +23,22 @@ public class MqReceiver {
 			StudentCourseInfo s = BeanString.stringToBean(new String(message,"UTF-8"), StudentCourseInfo.class);
 			System.out.println("消费端：" +s.getCouresInfoId()+ "," + s.getUserId());
 			seckillCouresService.seckillCoures(s.getCouresInfoId(), s.getUserId());
+			seckillCouresService.addOwnCourseCountListToRedis(s.getUserId());//当前学生当前选课周期选课量+1
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
 		
 	}
+	//高并发测试用例
+	//@RabbitListener(queues = "${seckill.queue.name}", containerFactory = "singleListenerContainer")
+	//public void receiveSeckill2(@Payload byte[] message) {
+	//	try {
+	//		String s = new String(message,"UTF-8");
+	//		System.out.println(s);
+	//	}catch (Exception e) {
+	//		e.printStackTrace();
+	//	}
+	//	
+	//}
 	
 }

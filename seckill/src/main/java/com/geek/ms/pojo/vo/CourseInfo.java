@@ -2,6 +2,8 @@ package com.geek.ms.pojo.vo;
 
 import java.io.Serializable;
 
+import com.geek.ms.pojo.po.Course;
+
 public class CourseInfo implements Serializable{
 
 	private static final long serialVersionUID = 4858337369886484440L;
@@ -10,6 +12,8 @@ public class CourseInfo implements Serializable{
 	private int couresId;
 	private int userId;
 	private int amount;
+	private Course course;
+	private UserInfo userInfo;
 	public CourseInfo() {
 		super();
 	}
@@ -44,10 +48,22 @@ public class CourseInfo implements Serializable{
 	public void setAmount(int amount) {
 		this.amount = amount;
 	}
+	public Course getCourse() {
+		return course;
+	}
+	public void setCourse(Course course) {
+		this.course = course;
+	}
+	public UserInfo getUserInfo() {
+		return userInfo;
+	}
+	public void setUserInfo(UserInfo userInfo) {
+		this.userInfo = userInfo;
+	}
 	@Override
 	public String toString() {
 		return "CourseInfo [id=" + id + ", couresId=" + couresId + ", userId=" + userId + ", amount=" + amount
-				+ "]";
+				+ ", course=" + course + ", userInfo=" + userInfo + "]";
 	}
 	
 }

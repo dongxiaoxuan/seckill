@@ -60,7 +60,7 @@
                         </li>
 
                         <!-- 新提示 -->
-                        <li class="am-text-sm">
+                        <li class="am-text-sm websocket">
                             <a href="javascript:;">
                                 <i class="am-icon-comments"></i> 聊天室
                             </a>
@@ -173,6 +173,10 @@ $(function(){
 		$("#hiddenStart").val(start);
 		$("#hiddenLength").val(length);
 		$("#hiddenForm1").submit();
+	});
+	$(".websocket").on("click", function() {
+		var username = "[[${session.userSession.username}]]";
+		window.location.href = "http://localhost:8087/LoginController?username=" + username;
 	});
 });
 </script>

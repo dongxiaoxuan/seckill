@@ -10,6 +10,13 @@
 		SELECT * FROM user_info_detail
 	</select>
 	
+	<select id="selectAllTeacher" resultType="com.geek.ms.pojo.vo.UserInfo">
+		select `user`.id,user_info.realName from user_info
+		left join `user` on `user`.id = user_info.user_id
+		left join user_role on `user`.id = user_role.user_id
+		where user_role.role_id = 2
+	</select>
+	
 	<update id="updateUserInfoByUserId" parameterType="com.geek.ms.pojo.vo.UserInfo">
 		UPDATE user_info 
 		SET realName = #{realName},

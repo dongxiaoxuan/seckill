@@ -57,7 +57,7 @@
                         </li>
 
                         <!-- 新提示 -->
-                        <li class="am-text-sm">
+                        <li class="am-text-sm websocket">
                             <a href="javascript:;">
                                 <i class="am-icon-comments"></i> 聊天室
                             </a>
@@ -159,14 +159,21 @@
     <script src="assets/js/app.js"></script>
 	<script th:inline="javascript">
 		$(function() {
+			
 			$(".other").css("height", "15px");
 			$(".course").css("height", "90px");
 			var jsonData = [[${courses}]];
 			for(var i = 0; i < jsonData.length; i ++) {
 				$("#course" + jsonData[i].wid + "_" + jsonData[i].fid).html(jsonData[i].name + '<br>(' + jsonData[i].realName + ')');
 			}
-		})
+		});
 	</script>
+	<script type="text/javascript">
+	$(".websocket").on("click", function() {
+		var username = "[[${session.userSession.username}]]";
+		window.location.href = "http://localhost:8087/LoginController?username=" + username;
+	});
+</script>
 </body>
 
 </html>
